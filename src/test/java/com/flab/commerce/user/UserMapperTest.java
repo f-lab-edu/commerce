@@ -31,7 +31,6 @@ class UserMapperTest {
 
     }
 
-
     @Test
     void 사용자생성_성공() {
         int countInsertRow = userMapper.insertUser(user);
@@ -43,5 +42,4 @@ class UserMapperTest {
         userMapper.insertUser(user);
         assertThrows(DuplicateKeyException.class, () -> userMapper.insertUser(user));
     }
-
 }

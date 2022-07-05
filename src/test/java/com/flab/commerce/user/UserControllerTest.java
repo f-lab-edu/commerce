@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@Import(RegisterDtoValidator.class)
+@Import({RegisterDtoValidator.class})
 class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -48,8 +48,7 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("회원가입 성공")
-    public void register() throws Exception {
+    public void 회원가입_성공() throws Exception {
         String json = objectMapper.writeValueAsString(registerDto);
 
         mockMvc.perform(post("/user/register")
@@ -61,8 +60,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입_실패: 이메일 중복")
-    public void register_fail_duplicate_email() throws Exception {
+    public void 회원가입_실패_이메일_중복() throws Exception {
 
         when(userMapper.existEmail("teset@gmail.com")).thenReturn(true);
 
@@ -76,8 +74,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입_실패: 패스워드와 확인패스워드가 다름")
-    public void register_fail_not_equals_password_and_confirmPassword() throws Exception {
+    public void 회원가입_실패_패스워드와_확인패스워드가_다름() throws Exception {
         registerDto.setConfirmPassword("1235");
         String json = objectMapper.writeValueAsString(registerDto);
 
@@ -90,8 +87,7 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("회원가입_실패: 우편번호 길이 5 초과")
-    public void register_fail_over_length_zipcode() throws Exception {
+    public void 회원가입_실패_우편번호_길이_5_초과() throws Exception {
         registerDto.setZipcode("123456");
         String json = objectMapper.writeValueAsString(registerDto);
 
@@ -103,8 +99,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입_실패: 우편번호 길이 2미만")
-    public void register_fail_under_length_zipcode() throws Exception {
+    public void 회원가입_실패_우편번호_길이_2_미만() throws Exception {
         registerDto.setZipcode("12");
 
         String json = objectMapper.writeValueAsString(registerDto);
@@ -115,4 +110,7 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+
+
 }

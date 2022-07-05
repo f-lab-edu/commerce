@@ -35,10 +35,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
-    public void register_success() {
+    void 회원가입_성공() {
         given(userMapper.insertUser(user)).willReturn(1);
         assertEquals(true, userService.register(user));
     }
-
 }
