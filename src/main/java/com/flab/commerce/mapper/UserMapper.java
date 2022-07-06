@@ -9,4 +9,7 @@ public interface UserMapper {
     boolean existEmail(String email);
 
     int insertUser(User newUser);
+
+
+    User findByEmail(String email);
 }

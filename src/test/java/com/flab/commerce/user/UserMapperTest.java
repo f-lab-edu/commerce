@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DuplicateKeyException;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @MybatisTest
@@ -41,5 +42,21 @@ class UserMapperTest {
     void 사용자생성_실패_이메일_중복() {
         userMapper.insertUser(user);
         assertThrows(DuplicateKeyException.class, () -> userMapper.insertUser(user));
+    }
+
+    @Test
+    void 사용자조회_1_건() {
+        userMapper.insertUser(user);
+
+        User findUser = userMapper.findByEmail(user.getEmail());
+
+        assertNotNull(findUser);
+        assertEquals(user.getEmail(), findUser.getEmail());
+    }
+
+    @Test
+    void 사용자조회_0_건() {
+        User findUser = userMapper.findByEmail(user.getEmail());
+        assertNull(findUser);
     }
 }

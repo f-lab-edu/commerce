@@ -9,4 +9,10 @@
     <select id="existEmail" resultType="boolean">
         select exists(select email from user where email = #{email})
     </select>
+
+    <select id="findByEmail" resultType="com.flab.commerce.user.User">
+        select *
+        from user
+        where email = #{email};
+    </select>
 </mapper>
