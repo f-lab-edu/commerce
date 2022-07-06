@@ -1,4 +1,4 @@
-package com.flab.commerce.user;
+package com.flab.commerce.user.validator;
 
 import com.flab.commerce.mapper.UserMapper;
 import com.flab.commerce.user.dto.RegisterDto;
@@ -23,7 +23,7 @@ public class RegisterDtoValidator implements Validator {
         RegisterDto registerDto = (RegisterDto) target;
 
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "비밀번화와 확인 비밀번호가 일치하지 않습니다.");
+            errors.rejectValue("confirmPassword", "비밀번호와 확인 비밀번호가 일치하지 않습니다.");
         }
         if (userMapper.existEmail(registerDto.getEmail())) {
             errors.rejectValue("email", "이미 존재하는 이메일입니다.");
