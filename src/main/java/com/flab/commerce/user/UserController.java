@@ -41,8 +41,14 @@ public class UserController {
         userService.register(newUser);
 
     }
+
     @PostMapping("/login")
     public void login(@Valid @RequestBody LoginDto loginDto, HttpSession session) {
         session.setAttribute(USER_EMAIL, loginDto.getEmail());
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpSession session) {
+        session.removeAttribute(USER_EMAIL);
     }
 }

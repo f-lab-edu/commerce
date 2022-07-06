@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static com.flab.commerce.user.UserController.USER_EMAIL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -158,6 +159,21 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
         String sessionEmail = (String) session.getAttribute(USER_EMAIL);
         assertNull(sessionEmail);
+    }
+
+    @Test
+    void 로그아웃_성공() throws Exception {
+
+        session = new MockHttpSession();
+        session.setAttribute(USER_EMAIL, "test");
+
+        mockMvc.perform(get("/user/logout")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
+
+        assertNull(session.getAttribute(USER_EMAIL));
     }
 
 }
