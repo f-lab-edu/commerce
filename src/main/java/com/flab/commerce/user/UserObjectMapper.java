@@ -7,10 +7,11 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserObjectMapper {
-    UserObjectMapper INSTANCE = Mappers.getMapper(UserObjectMapper.class);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createDate", expression = "java(java.time.LocalDateTime.now())")
-    @Mapping(target = "updateDate", expression = "java(java.time.LocalDateTime.now())")
-    User userToRegisterDto(RegisterDto registerDto);
+  UserObjectMapper INSTANCE = Mappers.getMapper(UserObjectMapper.class);
+
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "createDateTime", expression = "java(java.time.LocalDateTime.now())")
+  @Mapping(target = "modifyDateTime", expression = "java(java.time.LocalDateTime.now())")
+  User registerDtoToUser(RegisterDto registerDto);
 }

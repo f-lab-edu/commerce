@@ -11,23 +11,20 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class RegisterDtoValidator implements Validator {
 
-    private final UserMapper userMapper;
+  private final UserMapper userMapper;
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return clazz.equals(RegisterDto.class);
+  @Override
+  public boolean supports(Class<?> clazz) {
+    return clazz.equals(RegisterDto.class);
+  }
+
+  @Override
+  public void validate(Object target, Errors errors) {
+    RegisterDto registerDto = (RegisterDto) target;
+
+    if (userMapper.emailExists(registerDto.getEmail())) {
+      errors.rejectValue("email", "이미 존재하는 이메일입니다.");
     }
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        RegisterDto registerDto = (RegisterDto) target;
-
-        if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-        }
-        if (userMapper.existEmail(registerDto.getEmail())) {
-            errors.rejectValue("email", "이미 존재하는 이메일입니다.");
-        }
-
-    }
+  }
 }
