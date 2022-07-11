@@ -11,7 +11,6 @@ public class UserService {
   private final UserMapper userMapper;
 
   public boolean register(User newUser) {
-    int countInsertRow = userMapper.insertUser(newUser);
-    return countInsertRow == 1;
+    return userMapper.insertUser(newUser) == 1;
   }
 }

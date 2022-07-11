@@ -1,13 +1,11 @@
 package com.flab.commerce.user;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.commerce.mapper.UserMapper;
 import java.time.LocalDateTime;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +18,47 @@ class UserMapperTest {
 
   @Autowired
   UserMapper userMapper;
-  User user;
 
-  @BeforeEach
-  void setUp() {
-    user = User.builder()
+  @Test
+  void 사용자생성_성공() {
+    User user = getUser();
+
+    int countInsertRow = userMapper.insertUser(user);
+
+    assertThat(countInsertRow).isOne();
+  }
+
+  @Test
+  void 사용자생성_실패_이메일_중복() {
+    User user = getUser();
+
+    userMapper.insertUser(user);
+
+    assertThatThrownBy(() -> userMapper.insertUser(user)).isInstanceOf(DuplicateKeyException.class);
+  }
+
+  @Test
+  void 사용자조회_1_건() {
+    User user = getUser();
+    userMapper.insertUser(user);
+
+    User findUser = userMapper.findByEmail(user.getEmail());
+
+    assertThat(findUser).isNotNull();
+    assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
+  }
+
+  @Test
+  void 사용자조회_0_건() {
+    User user = getUser();
+
+    User findUser = userMapper.findByEmail(user.getEmail());
+
+    assertThat(findUser).isNull();
+  }
+
+  private User getUser() {
+    return User.builder()
         .email("test@gmail.com")
         .name("홍길동")
         .zipcode("00000")
@@ -34,36 +68,5 @@ class UserMapperTest {
         .createDateTime(LocalDateTime.now())
         .modifyDateTime(LocalDateTime.now())
         .build();
-  }
-
-  @Test
-  void 사용자생성_성공() {
-    int countInsertRow = userMapper.insertUser(user);
-
-    assertEquals(1, countInsertRow);
-  }
-
-  @Test
-  void 사용자생성_실패_이메일_중복() {
-    userMapper.insertUser(user);
-
-    assertThrows(DuplicateKeyException.class, () -> userMapper.insertUser(user));
-  }
-
-  @Test
-  void 사용자조회_1_건() {
-    userMapper.insertUser(user);
-
-    User findUser = userMapper.findByEmail(user.getEmail());
-
-    assertNotNull(findUser);
-    assertEquals(user.getEmail(), findUser.getEmail());
-  }
-
-  @Test
-  void 사용자조회_0_건() {
-    User findUser = userMapper.findByEmail(user.getEmail());
-    
-    assertNull(findUser);
   }
 }

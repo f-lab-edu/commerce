@@ -7,11 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,7 +34,6 @@ public class RegisterDto {
 
   @NotBlank
   @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$") // 010-1234-5678
-  @Length(max = 13)
   private String phone;
 
   @NotBlank

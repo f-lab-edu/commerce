@@ -1,15 +1,15 @@
 package com.flab.commerce.user;
 
-import com.flab.commerce.user.dto.LoginDto;
 import com.flab.commerce.user.dto.RegisterDto;
-import com.flab.commerce.user.validator.LoginDtoValidator;
 import com.flab.commerce.user.validator.RegisterDtoValidator;
-import com.flab.commerce.util.Constants;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,31 +23,26 @@ public class UserController {
 
   private final UserService userService;
   private final RegisterDtoValidator registerDtoValidator;
-  private final LoginDtoValidator loginDtoValidator;
 
   @InitBinder("registerDto")
   public void initRegisterDto(WebDataBinder webDataBinder) {
     webDataBinder.addValidators(registerDtoValidator);
   }
 
-  @InitBinder("loginDto")
-  public void initLoginDto(WebDataBinder webDataBinder) {
-    webDataBinder.addValidators(loginDtoValidator);
-  }
-
   @PostMapping("/register")
-  public void register(@Valid @RequestBody RegisterDto registerDto) {
+  public ResponseEntity<List<ObjectError>> register(@Valid @RequestBody RegisterDto registerDto,
+      Errors errors) {
+    if (errors.hasErrors()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
+    }
+
     User newUser = UserObjectMapper.INSTANCE.registerDtoToUser(registerDto);
-    userService.register(newUser);
-  }
 
-  @PostMapping("/login")
-  public void login(@Valid @RequestBody LoginDto loginDto, HttpSession session) {
-    session.setAttribute(Constants.USER_EMAIL, loginDto.getEmail());
-  }
+    if (!userService.register(newUser)) {
+      errors.reject(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), "서버 오류");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors.getAllErrors());
+    }
 
-  @GetMapping("/logout")
-  public void logout(HttpSession session) {
-    session.removeAttribute(Constants.USER_EMAIL);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }
