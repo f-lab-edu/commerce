@@ -19,18 +19,18 @@ public class RestAuthenticationProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String username = authentication.getName();
-    UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(username);
+    RestUserDetails restUserDetails = (RestUserDetails) userDetailsService.loadUserByUsername(username);
 
     String enteredPassword = (String) authentication.getCredentials();
-    String encodingPassword = userContext.getPassword();
+    String encodingPassword = restUserDetails.getPassword();
     if (!Utils.PASSWORD_ENCODER.matches(enteredPassword, encodingPassword)) {
       throw new BadCredentialsException("Bad credentials");
     }
 
-    PrincipalDto principalDto = UserObjectMapper.INSTANCE.userToPrincipalDto(userContext.getUser());
+    PrincipalDto principalDto = UserObjectMapper.INSTANCE.userToPrincipalDto(restUserDetails.getUser());
 
     return new RestAuthenticationToken(principalDto, null,
-        userContext.getAuthorities());
+        restUserDetails.getAuthorities());
   }
 
   @Override

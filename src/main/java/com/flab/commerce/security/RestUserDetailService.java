@@ -29,6 +29,6 @@ public class RestUserDetailService implements UserDetailsService {
     List<GrantedAuthority> roles = Collections.singletonList(
         new SimpleGrantedAuthority(Constants.ROLE_USER));
 
-    return new UserContext(user, roles);
+    return new RestUserDetails(user, roles);
   }
 }
