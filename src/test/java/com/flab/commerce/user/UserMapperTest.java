@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.commerce.mapper.UserMapper;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +65,8 @@ class UserMapperTest {
         .address("서울특별시 강남구 강남대로98길 20, 5층 플라타너스(역삼동)")
         .phone("010-1234-5678")
         .password("1234")
-        .createDateTime(LocalDateTime.now())
-        .modifyDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
   }
 }

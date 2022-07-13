@@ -1,6 +1,6 @@
 package com.flab.commerce.user;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +19,6 @@ public class User {
   private String phone;
   private String zipcode;
   private String address;
-  private LocalDateTime createDateTime;
-  private LocalDateTime modifyDateTime;
+  private ZonedDateTime createDateTime;
+  private ZonedDateTime modifyDateTime;
 }
