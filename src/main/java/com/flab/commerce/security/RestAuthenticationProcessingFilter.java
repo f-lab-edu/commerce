@@ -22,29 +22,27 @@ public class RestAuthenticationProcessingFilter extends AbstractAuthenticationPr
   private ObjectMapper objectMapper;
 
   public RestAuthenticationProcessingFilter() {
-    super(new AntPathRequestMatcher("/user/login", HttpMethod.POST.toString()));
+    super(new AntPathRequestMatcher("/users/login", HttpMethod.POST.toString()));
   }
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-    if (!isPost(request) || !isJson(request)) {
+    if (!isJson(request)) {
       throw new IllegalArgumentException("Authentication method not supported");
     }
 
     LoginDto loginDto = objectMapper.readValue(request.getReader(), LoginDto.class);
-    if (!StringUtils.hasLength(loginDto.getEmail()) && !StringUtils.hasLength(
-        loginDto.getPassword())) {
+
+    String email = loginDto.getEmail();
+    String password = loginDto.getPassword();
+
+    if (!StringUtils.hasLength(email) && !StringUtils.hasLength(password)) {
       throw new IllegalArgumentException("Email or password not empty");
     }
 
-    return getAuthenticationManager().authenticate(
-        new RestAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-  }
-
-  private boolean isPost(HttpServletRequest request) {
-    return HttpMethod.POST.toString().equals(request.getMethod());
+    return getAuthenticationManager().authenticate(new RestAuthenticationToken(email, password));
   }
 
   private boolean isJson(HttpServletRequest request) {

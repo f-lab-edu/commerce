@@ -7,6 +7,7 @@ import com.flab.commerce.security.RestAuthenticationSuccessHandler;
 import com.flab.commerce.security.RestLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -26,14 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-        .antMatchers("/user/login", "/user/register", "/user/logout").permitAll()
+        .antMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
+        .antMatchers(HttpMethod.GET, "/users/logout").permitAll()
         .anyRequest().authenticated()
         .and()
         .addFilterBefore(restAuthenticationProcessingFilter(),
             UsernamePasswordAuthenticationFilter.class);
 
+
     http.logout()
-        .logoutUrl("/user/logout")
+        .logoutUrl("/users/logout")
         .logoutSuccessHandler(restLogoutSuccessHandler());
 
     http.csrf().disable();

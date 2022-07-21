@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
   private final UserService userService;
@@ -29,7 +29,7 @@ public class UserController {
     webDataBinder.addValidators(registerDtoValidator);
   }
 
-  @PostMapping("/register")
+  @PostMapping
   public ResponseEntity<List<ObjectError>> register(@Valid @RequestBody RegisterDto registerDto,
       Errors errors) {
     if (errors.hasErrors()) {

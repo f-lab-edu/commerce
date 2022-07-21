@@ -47,7 +47,7 @@ class UserControllerTest {
     String json = objectMapper.writeValueAsString(registerDto);
     when(userService.register(any())).thenReturn(true);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -60,7 +60,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto(zipcode, phone);
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -72,7 +72,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto("123456", phone);
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -84,7 +84,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto("12", phone);
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -96,7 +96,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto(zipcode, "010-1234-567890");
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -108,7 +108,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto(zipcode, "010-1234-567");
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -122,7 +122,7 @@ class UserControllerTest {
 
     String json = objectMapper.writeValueAsString(registerDto);
 
-    mockMvc.perform(post("/user/register")
+    mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(json))
         .andDo(print())
@@ -138,7 +138,7 @@ class UserControllerTest {
     when(userMapper.findByEmail(loginDto.getEmail())).thenReturn(user);
     MockHttpSession session = new MockHttpSession();
 
-    mockMvc.perform(post("/user/login")
+    mockMvc.perform(post("/users/login")
             .session(session)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(loginDto))
@@ -154,7 +154,7 @@ class UserControllerTest {
     when(userMapper.findByEmail(loginDto.getEmail())).thenReturn(null);
     MockHttpSession session = new MockHttpSession();
 
-    mockMvc.perform(post("/user/login")
+    mockMvc.perform(post("/users/login")
             .session(session)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(loginDto))
@@ -168,7 +168,7 @@ class UserControllerTest {
   void 로그아웃_성공() throws Exception {
     MockHttpSession session = new MockHttpSession();
 
-    mockMvc.perform(get("/user/logout")
+    mockMvc.perform(get("/users/logout")
             .session(session)
             .contentType(MediaType.APPLICATION_JSON)
         ).andDo(print())

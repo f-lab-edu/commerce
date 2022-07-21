@@ -25,6 +25,5 @@ public class RegisterDtoValidator implements Validator {
     if (userMapper.emailExists(registerDto.getEmail())) {
       errors.rejectValue("email", "이미 존재하는 이메일입니다.");
     }
-
   }
 }
