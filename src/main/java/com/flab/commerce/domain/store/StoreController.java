@@ -21,6 +21,6 @@ public class StoreController {
     ) {
         Long ownerId = (Long) session.getAttribute("OWNER");
         storeService.register(registerRequest, ownerId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

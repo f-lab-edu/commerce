@@ -15,8 +15,8 @@ public class OwnerController {
     private final OwnerService ownerService;
 
     @PostMapping("/users")
-    public ResponseEntity register(@Valid @RequestBody OwnerRegisterDto registerRequest) {
+    public ResponseEntity<Void> register(@Valid @RequestBody OwnerRegisterDto registerRequest) {
         ownerService.register(registerRequest);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
