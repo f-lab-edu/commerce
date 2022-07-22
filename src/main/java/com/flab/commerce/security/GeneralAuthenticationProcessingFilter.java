@@ -39,8 +39,7 @@ public class GeneralAuthenticationProcessingFilter extends AbstractAuthenticatio
     if (!isJson(request)) {
       throw new IllegalArgumentException("Authentication method not supported");
     }
-
-
+    
     LoginDto loginDto = objectMapper.readValue(request.getReader(), LoginDto.class);
     validationLoginDto(loginDto);
 
