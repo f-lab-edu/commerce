@@ -20,18 +20,16 @@ public class OwnerRegisterDto {
     @NotBlank
     private String email;
 
+    @Length(min = 8)
     @NotBlank
     private String password;
 
-    @NotBlank
-    private String passwordConfirm;
-
-    @NotBlank
     @Length(min = 2)
+    @NotBlank
     private String name;
 
+    @Length(min = 10)
     @NotBlank
-    @Length(min = 11)
     private String phone;
 
     public Owner toOwner() {

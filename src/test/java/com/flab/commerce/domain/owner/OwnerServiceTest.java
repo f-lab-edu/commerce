@@ -31,12 +31,6 @@ class OwnerServiceTest {
     }
 
     @Test
-    void 비밀번호와_확인_비밀번호를_비교한다() {
-        assertThatThrownBy(() -> ownerService.register(createRequest().passwordConfirm("1").build()))
-                .isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
     void 이메일_존재여부를_확인한다() {
         given(ownerMapper.findByEmail(anyString())).willReturn(new Owner());
 
@@ -49,7 +43,6 @@ class OwnerServiceTest {
                 .builder()
                 .email("bgpark82@gmail.com")
                 .password("1234")
-                .passwordConfirm("1234")
                 .name("박병길")
                 .phone("01045808682");
     }

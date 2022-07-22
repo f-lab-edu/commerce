@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class StoreRegisterDto {
 
     @NotBlank
-    @Length(min = 2)
+    @Length(min = 1)
     private String name;
 
     @Length(min = 9)
