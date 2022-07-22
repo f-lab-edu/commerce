@@ -1,10 +1,10 @@
 package com.flab.commerce.config;
 
-import com.flab.commerce.security.RestAuthenticationFailureHandler;
-import com.flab.commerce.security.RestAuthenticationProcessingFilter;
-import com.flab.commerce.security.RestAuthenticationProvider;
-import com.flab.commerce.security.RestAuthenticationSuccessHandler;
-import com.flab.commerce.security.RestLogoutSuccessHandler;
+import com.flab.commerce.security.GeneralAuthenticationFailureHandler;
+import com.flab.commerce.security.GeneralAuthenticationProcessingFilter;
+import com.flab.commerce.security.GeneralAuthenticationProvider;
+import com.flab.commerce.security.GeneralAuthenticationSuccessHandler;
+import com.flab.commerce.security.GeneralLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -43,13 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public RestAuthenticationProvider restAuthenticationProvider() {
-    return new RestAuthenticationProvider();
+  public GeneralAuthenticationProvider restAuthenticationProvider() {
+    return new GeneralAuthenticationProvider();
   }
 
   @Bean
-  public RestAuthenticationProcessingFilter restAuthenticationProcessingFilter() throws Exception {
-    RestAuthenticationProcessingFilter filter = new RestAuthenticationProcessingFilter();
+  public GeneralAuthenticationProcessingFilter restAuthenticationProcessingFilter() throws Exception {
+    GeneralAuthenticationProcessingFilter filter = new GeneralAuthenticationProcessingFilter();
     filter.setAuthenticationManager(authenticationManagerBean());
     filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
     filter.setAuthenticationFailureHandler(authenticationFailureHandler());
@@ -58,16 +59,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public AuthenticationSuccessHandler authenticationSuccessHandler() {
-    return new RestAuthenticationSuccessHandler();
+    return new GeneralAuthenticationSuccessHandler();
   }
 
   @Bean
   public AuthenticationFailureHandler authenticationFailureHandler() {
-    return new RestAuthenticationFailureHandler();
+    return new GeneralAuthenticationFailureHandler();
   }
 
   @Bean
-  public RestLogoutSuccessHandler restLogoutSuccessHandler() {
-    return new RestLogoutSuccessHandler();
+  public LogoutSuccessHandler restLogoutSuccessHandler() {
+    return new GeneralLogoutSuccessHandler();
   }
 }

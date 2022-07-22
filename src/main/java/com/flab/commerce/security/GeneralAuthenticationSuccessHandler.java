@@ -12,11 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-public class RestAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class GeneralAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
   @Autowired
   private ObjectMapper objectMapper;
-
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

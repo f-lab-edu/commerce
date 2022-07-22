@@ -6,11 +6,11 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 @Getter
-public class RestUserDetails extends org.springframework.security.core.userdetails.User {
+public class GeneralUserDetails extends org.springframework.security.core.userdetails.User {
 
   private User user;
 
-  public RestUserDetails(User user,
+  public GeneralUserDetails(User user,
       Collection<? extends GrantedAuthority> authorities) {
     super(user.getEmail(), user.getPassword(), authorities);
     this.user = user;

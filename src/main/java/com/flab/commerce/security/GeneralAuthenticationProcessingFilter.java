@@ -16,12 +16,12 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StringUtils;
 
-public class RestAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
+public class GeneralAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
   @Autowired
   private ObjectMapper objectMapper;
 
-  public RestAuthenticationProcessingFilter() {
+  public GeneralAuthenticationProcessingFilter() {
     super(new AntPathRequestMatcher("/users/login", HttpMethod.POST.toString()));
   }
 
@@ -42,7 +42,7 @@ public class RestAuthenticationProcessingFilter extends AbstractAuthenticationPr
       throw new IllegalArgumentException("Email or password not empty");
     }
 
-    return getAuthenticationManager().authenticate(new RestAuthenticationToken(email, password));
+    return getAuthenticationManager().authenticate(new GeneralAuthenticationToken(email, password));
   }
 
   private boolean isJson(HttpServletRequest request) {

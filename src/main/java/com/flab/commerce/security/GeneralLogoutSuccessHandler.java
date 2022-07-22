@@ -10,10 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-public class RestLogoutSuccessHandler implements LogoutSuccessHandler {
+public class GeneralLogoutSuccessHandler implements LogoutSuccessHandler {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
-
 
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,

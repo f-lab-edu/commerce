@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.util.Assert;
 
-public class RestAuthenticationToken extends AbstractAuthenticationToken {
+public class GeneralAuthenticationToken extends AbstractAuthenticationToken {
 
   private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -14,14 +14,14 @@ public class RestAuthenticationToken extends AbstractAuthenticationToken {
 
   private Object credentials;
 
-  public RestAuthenticationToken(Object principal, Object credentials) {
+  public GeneralAuthenticationToken(Object principal, Object credentials) {
     super(null);
     this.principal = principal;
     this.credentials = credentials;
     setAuthenticated(false);
   }
 
-  public RestAuthenticationToken(Object principal, Object credentials,
+  public GeneralAuthenticationToken(Object principal, Object credentials,
       Collection<? extends GrantedAuthority> authorities) {
     super(authorities);
     this.principal = principal;

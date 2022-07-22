@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.mapper.UserMapper;
-import com.flab.commerce.security.RestUserDetailService;
+import com.flab.commerce.security.GeneralUserDetailsService;
 import com.flab.commerce.user.dto.LoginDto;
 import com.flab.commerce.user.dto.RegisterDto;
 import com.flab.commerce.user.validator.RegisterDtoValidator;
@@ -25,7 +25,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = UserController.class)
-@Import({RegisterDtoValidator.class, RestUserDetailService.class})
+@Import({RegisterDtoValidator.class, GeneralUserDetailsService.class})
 class UserControllerTest {
 
   @Autowired

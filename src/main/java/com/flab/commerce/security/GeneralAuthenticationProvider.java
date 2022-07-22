@@ -10,8 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public class RestAuthenticationProvider implements AuthenticationProvider {
-
+public class GeneralAuthenticationProvider implements AuthenticationProvider {
 
   @Autowired
   private UserDetailsService userDetailsService;
@@ -19,22 +18,21 @@ public class RestAuthenticationProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String username = authentication.getName();
-    RestUserDetails restUserDetails = (RestUserDetails) userDetailsService.loadUserByUsername(username);
+    GeneralUserDetails userDetails = (GeneralUserDetails) userDetailsService.loadUserByUsername(username);
 
     String enteredPassword = (String) authentication.getCredentials();
-    String encodingPassword = restUserDetails.getPassword();
+    String encodingPassword = userDetails.getPassword();
     if (!Utils.PASSWORD_ENCODER.matches(enteredPassword, encodingPassword)) {
       throw new BadCredentialsException("Bad credentials");
     }
 
-    PrincipalDto principalDto = UserObjectMapper.INSTANCE.userToPrincipalDto(restUserDetails.getUser());
+    PrincipalDto principalDto = UserObjectMapper.INSTANCE.userToPrincipalDto(userDetails.getUser());
 
-    return new RestAuthenticationToken(principalDto, null,
-        restUserDetails.getAuthorities());
+    return new GeneralAuthenticationToken(principalDto, null, userDetails.getAuthorities());
   }
 
   @Override
   public boolean supports(Class<?> authentication) {
-    return authentication.equals(RestAuthenticationToken.class);
+    return authentication.equals(GeneralAuthenticationToken.class);
   }
 }
