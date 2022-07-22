@@ -103,7 +103,7 @@ class UserControllerTest {
 
   @Test
   void 로그인_실패() throws Exception {
-    LoginDto loginDto = new LoginDto("email@email.com", "1234");
+    LoginDto loginDto = new LoginDto("email@email.com", "12345678");
     when(userMapper.findByEmail(loginDto.getEmail())).thenReturn(null);
     MockHttpSession session = new MockHttpSession();
 
