@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 public class LoginDto {
 
   @NotBlank
-  @Email @Length(min = 3, max = 255)
+  @Email
   private String email;
 
   @NotBlank

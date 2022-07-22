@@ -10,4 +10,8 @@ public class Utils {
   private Utils() {
     throw new IllegalStateException("Utility class");
   }
+
+  public static String encodePassword(String password) {
+    return PASSWORD_ENCODER.encode(password);
+  }
 }

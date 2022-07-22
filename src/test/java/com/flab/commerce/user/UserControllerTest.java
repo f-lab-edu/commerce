@@ -42,9 +42,9 @@ class UserControllerTest {
 
   @Test
   void 회원가입_성공() throws Exception {
-
     RegisterDto registerDto = getRegisterDto(zipcode, phone);
     String json = objectMapper.writeValueAsString(registerDto);
+
     when(userService.register(any())).thenReturn(true);
 
     mockMvc.perform(post("/users")
@@ -67,53 +67,6 @@ class UserControllerTest {
         .andExpect(status().isBadRequest());
   }
 
-  @Test
-  void 회원가입_실패_우편번호_길이_5_초과() throws Exception {
-    RegisterDto registerDto = getRegisterDto("123456", phone);
-    String json = objectMapper.writeValueAsString(registerDto);
-
-    mockMvc.perform(post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-        .andDo(print())
-        .andExpect(status().isBadRequest());
-  }
-
-  @Test
-  void 회원가입_실패_우편번호_길이_2_미만() throws Exception {
-    RegisterDto registerDto = getRegisterDto("12", phone);
-    String json = objectMapper.writeValueAsString(registerDto);
-
-    mockMvc.perform(post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-        .andDo(print())
-        .andExpect(status().isBadRequest());
-  }
-
-  @Test
-  void 회원가입_실패_휴대폰_길이_초과() throws Exception {
-    RegisterDto registerDto = getRegisterDto(zipcode, "010-1234-567890");
-    String json = objectMapper.writeValueAsString(registerDto);
-
-    mockMvc.perform(post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-        .andDo(print())
-        .andExpect(status().isBadRequest());
-  }
-
-  @Test
-  void 회원가입_실패_휴대폰_길이_미만() throws Exception {
-    RegisterDto registerDto = getRegisterDto(zipcode, "010-1234-567");
-    String json = objectMapper.writeValueAsString(registerDto);
-
-    mockMvc.perform(post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(json))
-        .andDo(print())
-        .andExpect(status().isBadRequest());
-  }
 
   @Test
   void 회원가입_실패_서버에러() throws Exception {

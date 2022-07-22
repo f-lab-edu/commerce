@@ -21,6 +21,29 @@ class UserServiceTest {
 
   @Test
   void 회원가입_성공() {
+    // Given
+    User user = User.builder()
+        .email("test@gmail.com")
+        .name("홍길동")
+        .zipcode("00000")
+        .address("서울특별시 강남구 강남대로98길 20, 5층 플라타너스(역삼동)")
+        .phone("010-1234-5678")
+        .password("1234")
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    given(userMapper.insertUser(user)).willReturn(1);
+
+    // When
+    boolean register = userService.register(user);
+
+    // Then
+    assertThat(register).isTrue();
+  }
+
+  @Test
+  void 회원가입_실패() {
+    // Given
     User user = User.builder()
         .email("test@gmail.com")
         .name("홍길동")
@@ -32,8 +55,12 @@ class UserServiceTest {
         .modifyDateTime(ZonedDateTime.now())
         .build();
 
-    given(userMapper.insertUser(user)).willReturn(1);
+    given(userMapper.insertUser(user)).willReturn(0);
 
-    assertThat(userService.register(user)).isTrue();
+    // When
+    boolean register = userService.register(user);
+
+    // Then
+    assertThat(register).isFalse();
   }
 }

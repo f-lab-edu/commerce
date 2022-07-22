@@ -17,7 +17,6 @@ public class RegisterDto {
 
   @NotBlank
   @Email
-  @Length(min = 10, max = 255)
   private String email;
 
   @NotBlank

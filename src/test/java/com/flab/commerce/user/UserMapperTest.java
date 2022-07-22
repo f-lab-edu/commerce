@@ -21,39 +21,49 @@ class UserMapperTest {
 
   @Test
   void 사용자생성_성공() {
+    // Given
     User user = getUser();
 
+    // When
     int countInsertRow = userMapper.insertUser(user);
 
+    // Then
     assertThat(countInsertRow).isOne();
   }
 
   @Test
   void 사용자생성_실패_이메일_중복() {
+    // Given
     User user = getUser();
-
     userMapper.insertUser(user);
 
+    // When // Then
     assertThatThrownBy(() -> userMapper.insertUser(user)).isInstanceOf(DuplicateKeyException.class);
   }
 
   @Test
   void 사용자조회_1_건() {
+    // Given
     User user = getUser();
     userMapper.insertUser(user);
 
+    // When
     User findUser = userMapper.findByEmail(user.getEmail());
 
+    // Then
     assertThat(findUser).isNotNull();
     assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
   }
 
   @Test
   void 사용자조회_0_건() {
+    // Given
     User user = getUser();
 
+    // When
     User findUser = userMapper.findByEmail(user.getEmail());
 
+    // Then
     assertThat(findUser).isNull();
   }
 
