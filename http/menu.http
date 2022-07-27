@@ -1,0 +1,10 @@
+### 메뉴 등록
+POST http://localhost:8080/menus
+Content-Type: application/json
+
+{
+  "name": "메뉴이름",
+  "price": "1000",
+  "image": "이미지",
+  "storeId": "1"
+}
