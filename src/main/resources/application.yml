@@ -1,0 +1,17 @@
+mybatis:
+  mapper-locations: mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+spring:
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 55001
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mysqlpw
+    url: jdbc:mysql://localhost:55000/commerce?characterEncoding=UTF-8&serverTimezone=UTC
