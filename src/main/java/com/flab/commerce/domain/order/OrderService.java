@@ -2,6 +2,8 @@ package com.flab.commerce.domain.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.commerce.domain.delivery.Delivery;
+import com.flab.commerce.domain.delivery.DeliveryMapper;
 import com.flab.commerce.domain.menu.Menu;
 import com.flab.commerce.domain.menu.MenuMapper;
 import com.flab.commerce.domain.menu.MenuOption;
@@ -21,7 +23,10 @@ public class OrderService {
 
   private final OrderMapper orderMapper;
 
+  private final DeliveryMapper deliveryMapper;
+
   private final ObjectMapper objectMapper;
+
 
   public Orders save(OrderSaveDto saveDto) throws JsonProcessingException {
     Menu menu = menuMapper.findById(saveDto.getMenuId());
@@ -43,8 +48,22 @@ public class OrderService {
         .updateDateTime(LocalDateTime.now())
         .build();
 
+
     orderMapper.save(order);
 
+    Delivery delivery = createDelivery(saveDto, order);
+    deliveryMapper.save(delivery);
+
     return order;
+  }
+
+  private Delivery createDelivery(OrderSaveDto saveDto, Orders order) {
+    return Delivery.builder()
+        .orderId(order.getId())
+        .address(saveDto.getAddress())
+        .addressDetail(saveDto.getAddressDetail())
+        .zip(saveDto.getZipCode())
+        .phone(saveDto.getPhone())
+        .build();
   }
 }

@@ -18,4 +18,10 @@ public class OrderSaveDto {
   private int amount;
 
   private String address;
+
+  private String addressDetail;
+
+  private String zipCode;
+
+  private String phone;
 }
