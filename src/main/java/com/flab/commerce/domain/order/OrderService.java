@@ -36,7 +36,7 @@ public class OrderService {
         .flatMap(Collection::stream)
         .collect(Collectors.toList());
 
-    BigDecimal totalPrice = menu.getPrice().multiply(new BigDecimal(saveDto.getAmount()));
+    BigDecimal totalPrice = menu.calculateTotalPrice(saveDto.getAmount());
 
     Orders order = Orders.builder()
         .userId(saveDto.getUserId())
@@ -47,7 +47,6 @@ public class OrderService {
         .createDateTime(LocalDateTime.now())
         .updateDateTime(LocalDateTime.now())
         .build();
-
 
     orderMapper.save(order);
 
