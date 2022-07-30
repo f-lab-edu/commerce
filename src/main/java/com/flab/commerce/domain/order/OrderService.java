@@ -6,12 +6,8 @@ import com.flab.commerce.domain.delivery.Delivery;
 import com.flab.commerce.domain.delivery.DeliveryMapper;
 import com.flab.commerce.domain.menu.Menu;
 import com.flab.commerce.domain.menu.MenuMapper;
-import com.flab.commerce.domain.menu.MenuOption;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,29 +27,28 @@ public class OrderService {
   public Orders save(OrderSaveDto saveDto) throws JsonProcessingException {
     Menu menu = menuMapper.findById(saveDto.getMenuId());
 
-    List<MenuOption> options = menu.getGroups().stream()
-        .map(group -> group.getOptions())
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList());
-
-    BigDecimal totalPrice = menu.calculateTotalPrice(saveDto.getAmount());
-
-    Orders order = Orders.builder()
-        .userId(saveDto.getUserId())
-        .totalPrice(totalPrice)
-        .status(OrderStatus.READY)
-        .address(saveDto.getAddress())
-        .menuOptions(objectMapper.writeValueAsString(options))
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
-        .build();
-
+    Orders order = createOrder(saveDto, menu);
     orderMapper.save(order);
 
     Delivery delivery = createDelivery(saveDto, order);
     deliveryMapper.save(delivery);
 
     return order;
+  }
+
+  private Orders createOrder(OrderSaveDto saveDto, Menu menu) throws JsonProcessingException {
+    final String menuOptions = objectMapper.writeValueAsString(menu.getMenuOptions());
+    final BigDecimal totalPrice = menu.calculateTotalPrice(saveDto.getAmount());
+
+    return Orders.builder()
+        .userId(saveDto.getUserId())
+        .totalPrice(totalPrice)
+        .status(OrderStatus.READY)
+        .address(saveDto.getAddress())
+        .menuOptions(menuOptions)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
   }
 
   private Delivery createDelivery(OrderSaveDto saveDto, Orders order) {

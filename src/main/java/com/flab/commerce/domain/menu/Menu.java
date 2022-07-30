@@ -2,7 +2,9 @@ package com.flab.commerce.domain.menu;
 
 import com.flab.commerce.exception.BadInputException;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +28,12 @@ public class Menu {
     }
 
     return price.multiply(BigDecimal.valueOf(amount));
+  }
+
+  public List<MenuOption> getMenuOptions() {
+    return this.groups.stream()
+        .map(MenuOptionGroup::getOptions)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
   }
 }
