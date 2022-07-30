@@ -1,13 +1,14 @@
 package com.flab.commerce.domain.order;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.delivery.Delivery;
 import com.flab.commerce.domain.delivery.DeliveryMapper;
 import com.flab.commerce.domain.menu.Menu;
 import com.flab.commerce.domain.menu.MenuMapper;
+import com.flab.commerce.domain.menu.MenuOption;
+import com.flab.commerce.util.JsonMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,10 @@ public class OrderService {
 
   private final DeliveryMapper deliveryMapper;
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper<List<MenuOption>> jsonMapper;
 
 
-  public Orders save(OrderSaveDto saveDto) throws JsonProcessingException {
+  public Orders save(OrderSaveDto saveDto) {
     Menu menu = menuMapper.findById(saveDto.getMenuId());
 
     Orders order = createOrder(saveDto, menu);
@@ -36,8 +37,8 @@ public class OrderService {
     return order;
   }
 
-  private Orders createOrder(OrderSaveDto saveDto, Menu menu) throws JsonProcessingException {
-    final String menuOptions = objectMapper.writeValueAsString(menu.getMenuOptions());
+  private Orders createOrder(OrderSaveDto saveDto, Menu menu) {
+    final String menuOptions = jsonMapper.parse(menu.getMenuOptions());
     final BigDecimal totalPrice = menu.calculateTotalPrice(saveDto.getAmount());
 
     return Orders.builder()
