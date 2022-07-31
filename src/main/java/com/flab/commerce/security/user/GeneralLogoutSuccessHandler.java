@@ -1,4 +1,4 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

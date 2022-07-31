@@ -4,7 +4,8 @@ package com.flab.commerce.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.flab.commerce.mapper.UserMapper;
+import com.flab.commerce.domain.user.User;
+import com.flab.commerce.domain.user.UserMapper;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;

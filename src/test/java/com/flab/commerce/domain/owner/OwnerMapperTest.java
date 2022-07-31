@@ -1,14 +1,13 @@
 package com.flab.commerce.domain.owner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = NONE)
@@ -43,7 +42,7 @@ class OwnerMapperTest {
                 .name("박병길")
                 .phone("0101231234")
                 .createDateTime(LocalDateTime.now())
-                .createDateTime(LocalDateTime.now())
+                .updateDateTime(LocalDateTime.now())
                 .build();
     }
 }

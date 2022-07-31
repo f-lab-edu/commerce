@@ -1,4 +1,4 @@
-package com.flab.commerce.user.dto;
+package com.flab.commerce.domain.user.dto;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
