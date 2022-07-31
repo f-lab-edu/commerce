@@ -3,7 +3,9 @@ package com.flab.commerce.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.flab.commerce.mapper.UserMapper;
+import com.flab.commerce.domain.user.User;
+import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.domain.user.UserService;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

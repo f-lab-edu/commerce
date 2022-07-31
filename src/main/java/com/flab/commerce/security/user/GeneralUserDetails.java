@@ -1,6 +1,6 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.user;
 
-import com.flab.commerce.user.User;
+import com.flab.commerce.domain.user.User;
 import java.util.Collection;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
