@@ -54,10 +54,12 @@ CREATE TABLE menu
     status           VARCHAR(50),
     description      VARCHAR(250),
     image            VARCHAR(50),
-    owner_id         INT(11),
+    price            INT,
+    store_id         INT(11) NOT NULL,
     create_date_time VARCHAR(50),
     update_date_time VARCHAR(50),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (store_id) REFERENCES store (id)
 );
 
 INSERT INTO owner (id, email, password, name, phone, create_date_time, update_date_time)

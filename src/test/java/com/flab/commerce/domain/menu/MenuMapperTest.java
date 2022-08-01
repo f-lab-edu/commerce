@@ -101,7 +101,7 @@ class MenuMapperTest {
         .name("돈까스")
         .price(10000L)
         .image("image")
-        .storeId(99L)
+        .storeId(null)
         .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();

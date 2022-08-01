@@ -4,8 +4,8 @@ public class Constants {
 
   public static final String CONTENT_TYPE = "Content-Type";
 
-  public static final String ROLE_USER = "ROLE_USER";
-  public static final String ROLE_OWNER = "ROLE_OWNER";
+  public static final String ROLE_USER = "USER";
+  public static final String ROLE_OWNER = "OWNER";
 
   public static final String MUST_NOT_BE_BLANK = "must not be blank";
 

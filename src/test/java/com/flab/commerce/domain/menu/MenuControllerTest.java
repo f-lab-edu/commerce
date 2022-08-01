@@ -6,15 +6,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.commerce.domain.owner.OwnerMapper;
+import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.security.owner.OwnerDetailsService;
+import com.flab.commerce.security.user.GeneralUserDetailsService;
+import com.flab.commerce.util.Constants;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = MenuController.class)
+@Import({OwnerDetailsService.class, GeneralUserDetailsService.class})
+@WithMockUser(roles = Constants.ROLE_OWNER)
 class MenuControllerTest {
 
   @Autowired
@@ -28,6 +37,12 @@ class MenuControllerTest {
 
   @MockBean
   MenuMapper menuMapper;
+
+  @MockBean
+  private OwnerMapper ownerMapper;
+
+  @MockBean
+  private UserMapper userMapper;
 
   @Test
   void 메뉴등록_성공() throws Exception {
