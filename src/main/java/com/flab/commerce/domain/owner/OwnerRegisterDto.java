@@ -1,5 +1,6 @@
 package com.flab.commerce.domain.owner;
 
+import com.flab.commerce.util.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class OwnerRegisterDto {
     public Owner toOwner() {
         return Owner.builder()
                 .email(email)
-                .password(password)
+                .password(Utils.encodePassword(password))
                 .name(name)
                 .phone(phone)
                 .createDateTime(LocalDateTime.now())

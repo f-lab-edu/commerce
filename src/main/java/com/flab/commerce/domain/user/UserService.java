@@ -1,6 +1,5 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
-import com.flab.commerce.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

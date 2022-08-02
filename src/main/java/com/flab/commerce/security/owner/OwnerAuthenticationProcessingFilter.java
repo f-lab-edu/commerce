@@ -1,7 +1,7 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.owner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.commerce.user.dto.LoginDto;
+import com.flab.commerce.domain.user.dto.LoginDto;
 import com.flab.commerce.util.Constants;
 import java.io.IOException;
 import java.util.Set;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
-public class GeneralAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
+public class OwnerAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -28,8 +28,8 @@ public class GeneralAuthenticationProcessingFilter extends AbstractAuthenticatio
   @Autowired
   private Validator validator;
 
-  public GeneralAuthenticationProcessingFilter() {
-    super(new AntPathRequestMatcher("/users/login", HttpMethod.POST.toString()));
+  public OwnerAuthenticationProcessingFilter() {
+    super(new AntPathRequestMatcher("/owners/login", HttpMethod.POST.toString()));
   }
 
   @Override
@@ -44,7 +44,7 @@ public class GeneralAuthenticationProcessingFilter extends AbstractAuthenticatio
     validationLoginDto(loginDto);
 
     return getAuthenticationManager().authenticate(
-        new GeneralAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        new OwnerAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
   }
 
   private boolean isJson(HttpServletRequest request) {

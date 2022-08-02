@@ -10,11 +10,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.commerce.mapper.UserMapper;
-import com.flab.commerce.security.GeneralUserDetailsService;
-import com.flab.commerce.user.dto.LoginDto;
-import com.flab.commerce.user.dto.RegisterDto;
-import com.flab.commerce.user.validator.RegisterDtoValidator;
+import com.flab.commerce.domain.owner.OwnerMapper;
+import com.flab.commerce.domain.user.User;
+import com.flab.commerce.domain.user.UserController;
+import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.domain.user.UserObjectMapper;
+import com.flab.commerce.domain.user.UserService;
+import com.flab.commerce.domain.user.dto.LoginDto;
+import com.flab.commerce.domain.user.dto.RegisterDto;
+import com.flab.commerce.domain.user.validator.RegisterDtoValidator;
+import com.flab.commerce.security.owner.OwnerDetailsService;
+import com.flab.commerce.security.user.GeneralUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,19 +31,26 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = UserController.class)
-@Import({RegisterDtoValidator.class, GeneralUserDetailsService.class})
+@Import({RegisterDtoValidator.class, GeneralUserDetailsService.class, OwnerDetailsService.class})
 class UserControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
+
   @Autowired
   ObjectMapper objectMapper;
 
   @MockBean
   UserService userService;
+
   @MockBean
   UserMapper userMapper;
+
+  @MockBean
+  OwnerMapper ownerMapper;
+
   final String zipcode = "12345";
+
   final String phone = "010-1234-5678";
 
   @Test

@@ -1,19 +1,20 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.user;
 
-import com.flab.commerce.user.UserObjectMapper;
-import com.flab.commerce.user.dto.PrincipalDto;
+import com.flab.commerce.domain.user.UserObjectMapper;
+import com.flab.commerce.domain.user.dto.PrincipalDto;
 import com.flab.commerce.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+
+@RequiredArgsConstructor
 public class GeneralAuthenticationProvider implements AuthenticationProvider {
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {

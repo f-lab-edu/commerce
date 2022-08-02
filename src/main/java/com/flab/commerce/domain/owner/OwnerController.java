@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.owner;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,9 +15,9 @@ public class OwnerController {
 
     private final OwnerService ownerService;
 
-    @PostMapping("/users")
+    @PostMapping("/owners")
     public ResponseEntity<Void> register(@Valid @RequestBody OwnerRegisterDto registerRequest) {
         ownerService.register(registerRequest);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

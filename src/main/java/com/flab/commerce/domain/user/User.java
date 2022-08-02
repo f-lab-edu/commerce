@@ -1,4 +1,4 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;

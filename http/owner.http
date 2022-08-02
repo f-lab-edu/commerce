@@ -1,11 +1,19 @@
 ### 사장님이 회원가입한다
-POST http://localhost:8080/users
+POST http://localhost:8080/owners
 Content-Type: application/json
 
 {
-  "email": "bgpark82@gmail.com",
-  "password": "1234",
-  "passwordConfirm": "1234",
+  "email": "bgpark@gmail.com",
+  "password": "12345678",
   "name": "박병길",
   "phone": "01045808682"
+}
+
+### 사장님 로그인한다.
+POST http://localhost:8080/owners/login
+Content-Type: application/json
+
+{
+  "email": "bgpark@gmail.com",
+  "password": "12345678"
 }

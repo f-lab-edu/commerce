@@ -1,7 +1,7 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.user;
 
-import com.flab.commerce.mapper.UserMapper;
-import com.flab.commerce.user.User;
+import com.flab.commerce.domain.user.User;
+import com.flab.commerce.domain.user.UserMapper;
 import com.flab.commerce.util.Constants;
 import java.util.Collections;
 import java.util.List;

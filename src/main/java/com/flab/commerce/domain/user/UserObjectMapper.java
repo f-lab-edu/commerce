@@ -1,7 +1,7 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
-import com.flab.commerce.user.dto.PrincipalDto;
-import com.flab.commerce.user.dto.RegisterDto;
+import com.flab.commerce.domain.user.dto.RegisterDto;
+import com.flab.commerce.domain.user.dto.PrincipalDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
