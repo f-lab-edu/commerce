@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.order;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class OrderSaveDto {
   @NotNull
   private Long userId;
 
+  @Min(value = 0)
   private int amount;
 
   @NotBlank

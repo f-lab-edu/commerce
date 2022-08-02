@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -80,6 +81,18 @@ class OrderControllerTest {
   @NullSource
   void 빈_사용자_아이디로_주문한다(Long userId) throws Exception {
     String body = mapper.writeValueAsString(createOrderSaveDto().userId(userId).build());
+
+    mvc.perform(post("/orders")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {-Integer.MAX_VALUE, -1})
+  void 음수_메뉴_개수로_주문한다(int amount) throws Exception {
+    String body = mapper.writeValueAsString(createOrderSaveDto().amount(amount).build());
 
     mvc.perform(post("/orders")
             .contentType(MediaType.APPLICATION_JSON_VALUE)
