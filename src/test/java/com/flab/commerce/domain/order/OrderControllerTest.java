@@ -1,9 +1,14 @@
 package com.flab.commerce.domain.order;
 
+import static com.flab.commerce.util.Constants.JSON_PROCESSING_EXCEPTION_MESSAGE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.order.OrderSaveDto.OrderSaveDtoBuilder;
 import java.util.stream.Stream;
@@ -39,6 +44,19 @@ class OrderControllerTest {
             .content(body))
         .andDo(print())
         .andExpect(status().isOk());
+  }
+
+  @Test
+  void JSON_파싱에_실패한_경우() throws Exception {
+    when(orderService.save(any())).thenThrow(JsonProcessingException.class);
+    String body = mapper.writeValueAsString(createOrderSaveDto().build());
+
+    mvc.perform(post("/orders")
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(result -> assertThat(result.getResponse().getContentAsString()).isEqualTo(JSON_PROCESSING_EXCEPTION_MESSAGE));
   }
 
   @ParameterizedTest
