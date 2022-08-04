@@ -31,7 +31,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_성공() {
     // Given
-    LoginDto loginDto = new LoginDto("email@email.com", "12345678");
+    LoginDto loginDto = new LoginDto("email@email.com", "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -44,7 +44,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_이메일이_Null() {
     // Given
-    LoginDto loginDto = new LoginDto(null, "12345678");
+    LoginDto loginDto = new LoginDto(null, "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -58,7 +58,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_이메일이_빈값() {
     // Given
-    LoginDto loginDto = new LoginDto("", "12345678");
+    LoginDto loginDto = new LoginDto("", "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -72,7 +72,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_패스워드가_Null() {
     // Given
-    LoginDto loginDto = new LoginDto("email@email.com", null);
+    LoginDto loginDto = new LoginDto("email@email.com", null, "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -86,7 +86,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_패스워드가_빈값() {
     // Given
-    LoginDto loginDto = new LoginDto("email@email.com", "");
+    LoginDto loginDto = new LoginDto("email@email.com", "", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -104,7 +104,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_이메일과_패스워드가_Null() {
     // Given
-    LoginDto loginDto = new LoginDto(null, null);
+    LoginDto loginDto = new LoginDto(null, null, "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -123,7 +123,7 @@ class LoginDtoTest {
     String local = IntStream.range(0, 6).mapToObj(i -> "1234567890").collect(Collectors.joining());
     local += "123456";
     String email = local + "@email.com";
-    LoginDto loginDto = new LoginDto(email, "12345678");
+    LoginDto loginDto = new LoginDto(email, "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -141,7 +141,7 @@ class LoginDtoTest {
     String label = IntStream.range(0, 6).mapToObj(i -> "1234567890").collect(Collectors.joining());
     label += "1234";
     String email = "test@" + label + ".com";
-    LoginDto loginDto = new LoginDto(email, "12345678");
+    LoginDto loginDto = new LoginDto(email, "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -167,7 +167,7 @@ class LoginDtoTest {
         .collect(Collectors.joining());
 
     String email = "test@" + label + "1234";
-    LoginDto loginDto = new LoginDto(email, "12345678");
+    LoginDto loginDto = new LoginDto(email, "12345678", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -182,7 +182,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_패스워드가_길이_8_미만() {
     // Given
-    LoginDto loginDto = new LoginDto("email@email.com", "1234567");
+    LoginDto loginDto = new LoginDto("email@email.com", "1234567", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(
@@ -197,7 +197,7 @@ class LoginDtoTest {
   @Test
   void 로그인입력데이터검증_실패_패스워드가_길이_15_초과() {
     // Given
-    LoginDto loginDto = new LoginDto("email@email.com", "1234567890123456");
+    LoginDto loginDto = new LoginDto("email@email.com", "1234567890123456", "/users/login");
 
     // When
     Collection<ConstraintViolation<LoginDto>> constraintViolations = validator.validate(

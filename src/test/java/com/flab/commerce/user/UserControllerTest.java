@@ -19,19 +19,19 @@ import com.flab.commerce.domain.user.UserService;
 import com.flab.commerce.domain.user.dto.LoginDto;
 import com.flab.commerce.domain.user.dto.RegisterDto;
 import com.flab.commerce.domain.user.validator.RegisterDtoValidator;
-import com.flab.commerce.security.owner.OwnerDetailsService;
-import com.flab.commerce.security.user.GeneralUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = UserController.class)
-@Import({RegisterDtoValidator.class, GeneralUserDetailsService.class, OwnerDetailsService.class})
+@ComponentScan(basePackages = "com.flab.commerce.security")
+@Import(RegisterDtoValidator.class)
 class UserControllerTest {
 
   @Autowired
@@ -100,7 +100,7 @@ class UserControllerTest {
     RegisterDto registerDto = getRegisterDto(zipcode, phone);
     User user = UserObjectMapper.INSTANCE.registerDtoToUser(registerDto);
 
-    LoginDto loginDto = new LoginDto("email@email.com", "12345678");
+    LoginDto loginDto = new LoginDto("email@email.com", "12345678", "/users/login");
     when(userMapper.findByEmail(loginDto.getEmail())).thenReturn(user);
     MockHttpSession session = new MockHttpSession();
 
@@ -116,7 +116,7 @@ class UserControllerTest {
 
   @Test
   void 로그인_실패() throws Exception {
-    LoginDto loginDto = new LoginDto("email@email.com", "12345678");
+    LoginDto loginDto = new LoginDto("email@email.com", "12345678", "/users/login");
     when(userMapper.findByEmail(loginDto.getEmail())).thenReturn(null);
     MockHttpSession session = new MockHttpSession();
 

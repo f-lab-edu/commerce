@@ -8,11 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.owner.OwnerRegisterDto.OwnerRegisterDtoBuilder;
-
 import com.flab.commerce.domain.user.UserMapper;
 import com.flab.commerce.domain.user.dto.LoginDto;
-import com.flab.commerce.security.owner.OwnerDetailsService;
-import com.flab.commerce.security.user.GeneralUserDetailsService;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,13 +17,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(OwnerController.class)
-@Import({OwnerDetailsService.class, GeneralUserDetailsService.class})
+@ComponentScan(basePackages = "com.flab.commerce.security")
 class OwnerControllerTest {
 
     @Autowired
@@ -110,7 +107,7 @@ class OwnerControllerTest {
         Owner owner = OwnerObjectMapper.INSTANCE.toOwner(ownerRegisterDto);
 
         LoginDto loginDto = new LoginDto(ownerRegisterDto.getEmail(),
-            ownerRegisterDto.getPassword());
+            ownerRegisterDto.getPassword(), "/owners/login");
         when(ownerMapper.findByEmail(loginDto.getEmail())).thenReturn(owner);
         MockHttpSession session = new MockHttpSession();
 
