@@ -1,6 +1,5 @@
-package com.flab.commerce.domain.user;
+package com.flab.commerce.domain.menu;
 
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,21 +10,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class Menu {
 
   private Long id;
 
-  private String email;
-
-  private String password;
-
   private String name;
 
-  private String phone;
+  private Long price;
 
-  private String zipcode;
+  private String image;
 
-  private String address;
+  private Long storeId;
 
   private ZonedDateTime createDateTime;
 
