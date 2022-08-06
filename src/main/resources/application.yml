@@ -1,0 +1,12 @@
+
+mybatis:
+  mapper-locations: mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mysqlpw
+    url: jdbc:mysql://localhost:55000/commerce?characterEncoding=UTF-8&serverTimezone=UTC
