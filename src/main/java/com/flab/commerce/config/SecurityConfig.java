@@ -1,7 +1,7 @@
 package com.flab.commerce.config;
 
-import com.flab.commerce.security.user.GeneralAuthenticationProcessingFilter;
-import com.flab.commerce.security.user.GeneralLogoutSuccessHandler;
+import com.flab.commerce.security.GeneralAuthenticationProcessingFilter;
+import com.flab.commerce.security.GeneralLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.owner.OwnerRegisterDto.OwnerRegisterDtoBuilder;
 import com.flab.commerce.domain.user.UserMapper;
-import com.flab.commerce.domain.user.dto.LoginDto;
+import com.flab.commerce.domain.user.LoginDto;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

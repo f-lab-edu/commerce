@@ -1,7 +1,5 @@
 package com.flab.commerce.domain.user;
 
-import com.flab.commerce.domain.user.dto.RegisterDto;
-import com.flab.commerce.domain.user.validator.RegisterDtoValidator;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

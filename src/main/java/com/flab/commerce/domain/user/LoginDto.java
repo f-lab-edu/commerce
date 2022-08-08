@@ -1,4 +1,4 @@
-package com.flab.commerce.domain.user.dto;
+package com.flab.commerce.domain.user;
 
 
 import javax.validation.constraints.Email;

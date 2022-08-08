@@ -1,4 +1,4 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -16,9 +16,9 @@ import com.flab.commerce.domain.user.UserController;
 import com.flab.commerce.domain.user.UserMapper;
 import com.flab.commerce.domain.user.UserObjectMapper;
 import com.flab.commerce.domain.user.UserService;
-import com.flab.commerce.domain.user.dto.LoginDto;
-import com.flab.commerce.domain.user.dto.RegisterDto;
-import com.flab.commerce.domain.user.validator.RegisterDtoValidator;
+import com.flab.commerce.domain.user.LoginDto;
+import com.flab.commerce.domain.user.RegisterDto;
+import com.flab.commerce.domain.user.RegisterDtoValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

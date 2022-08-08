@@ -1,7 +1,7 @@
-package com.flab.commerce.security.user;
+package com.flab.commerce.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.commerce.domain.user.dto.LoginDto;
+import com.flab.commerce.domain.user.LoginDto;
 import com.flab.commerce.util.Constants;
 import java.io.IOException;
 import java.util.Set;

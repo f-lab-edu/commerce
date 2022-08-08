@@ -1,6 +1,6 @@
-package com.flab.commerce.security.user;
+package com.flab.commerce.security;
 
-import com.flab.commerce.domain.user.dto.LoginDto;
+import com.flab.commerce.domain.user.LoginDto;
 import com.flab.commerce.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

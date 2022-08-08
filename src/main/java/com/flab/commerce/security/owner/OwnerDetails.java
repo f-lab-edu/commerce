@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 public class OwnerDetails extends org.springframework.security.core.userdetails.User {
 
-  private Owner owner;
+  private final Owner owner;
 
   public OwnerDetails(Owner owner,
       Collection<? extends GrantedAuthority> authorities) {

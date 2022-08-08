@@ -1,4 +1,4 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
 
 import static org.assertj.core.api.Assertions.assertThat;

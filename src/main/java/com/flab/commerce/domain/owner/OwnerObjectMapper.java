@@ -6,9 +6,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface OwnerObjectMapper {
-  OwnerObjectMapper INSTANCE = Mappers.getMapper(OwnerObjectMapper.class);
 
-  PrincipalOwnerDto toDto(Owner owner);
+  OwnerObjectMapper INSTANCE = Mappers.getMapper(OwnerObjectMapper.class);
 
   @Mapping(target = "password", expression = "java(com.flab.commerce.util.Utils.PASSWORD_ENCODER."
       + "encode(ownerRegisterDto.getPassword()))")
