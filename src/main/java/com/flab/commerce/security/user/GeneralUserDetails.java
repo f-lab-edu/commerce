@@ -1,6 +1,6 @@
-package com.flab.commerce.security;
+package com.flab.commerce.security.user;
 
-import com.flab.commerce.user.User;
+import com.flab.commerce.domain.user.User;
 import java.util.Collection;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 public class GeneralUserDetails extends org.springframework.security.core.userdetails.User {
 
-  private User user;
+  private final User user;
 
   public GeneralUserDetails(User user,
       Collection<? extends GrantedAuthority> authorities) {

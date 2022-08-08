@@ -1,9 +1,10 @@
-package com.flab.commerce.user.dto;
+package com.flab.commerce.domain.user.dto;
 
 import static com.flab.commerce.util.Constants.LENGTH_MUST_BE_BETWEEN_MIN_AND_NAX;
 import static com.flab.commerce.util.Constants.MUST_NOT_BE_BLANK;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.flab.commerce.domain.user.RegisterDto;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;

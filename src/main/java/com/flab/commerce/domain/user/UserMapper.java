@@ -1,6 +1,5 @@
-package com.flab.commerce.mapper;
+package com.flab.commerce.domain.user;
 
-import com.flab.commerce.user.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

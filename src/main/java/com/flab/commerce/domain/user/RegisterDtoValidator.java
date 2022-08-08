@@ -1,7 +1,7 @@
-package com.flab.commerce.user.validator;
+package com.flab.commerce.domain.user;
 
-import com.flab.commerce.mapper.UserMapper;
-import com.flab.commerce.user.dto.RegisterDto;
+import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.domain.user.RegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

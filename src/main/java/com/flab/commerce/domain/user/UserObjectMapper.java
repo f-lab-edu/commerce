@@ -1,7 +1,5 @@
-package com.flab.commerce.user;
+package com.flab.commerce.domain.user;
 
-import com.flab.commerce.user.dto.PrincipalDto;
-import com.flab.commerce.user.dto.RegisterDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -17,6 +15,4 @@ public interface UserObjectMapper {
   @Mapping(target = "password", expression = "java(com.flab.commerce.util.Utils.PASSWORD_ENCODER."
       + "encode(registerDto.getPassword()))")
   User registerDtoToUser(RegisterDto registerDto);
-
-  PrincipalDto userToPrincipalDto(User user);
 }
