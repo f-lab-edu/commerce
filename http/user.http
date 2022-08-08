@@ -1,0 +1,21 @@
+### 사용자가 회원가입한다
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "test12@gmail.com",
+  "name": "홍길동",
+  "zipcode": "12345",
+  "address": "서울특별시 강남구 강남대로98길 20, 5층 플라타너스(역삼동)",
+  "phone": "010-1234-5678",
+  "password": "12345678"
+}
+
+### 사용자가 로그인한다.
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "test12@gmail.com",
+  "password": "12345678"
+}
