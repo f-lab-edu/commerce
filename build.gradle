@@ -19,17 +19,29 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.mapstruct:mapstruct:1.5.1.Final'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
+    compileOnly 'org.projectlombok:lombok'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'org.mapstruct:mapstruct:1.5.1.Final'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+    implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    testImplementation "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2"
+    testImplementation 'org.springframework.security:spring-security-test:5.7.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation  "org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2"
 }
 
 tasks.named('test') {
