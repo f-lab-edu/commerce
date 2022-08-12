@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flab.commerce.domain.menu.MenuMapper">
+  <insert id="register" parameterType="com.flab.commerce.domain.menu.Menu"
+    useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO menu (name, price, image, store_id, create_date_time, modify_date_time)
+    VALUES (#{name}, #{price}, #{image}, #{storeId}, #{createDateTime}, #{modifyDateTime})
+  </insert>
+
+  <select id="findByStoreId" resultType="com.flab.commerce.domain.menu.Menu">
+    SELECT *
+    FROM menu
+    WHERE store_id = #{storeId};
+  </select>
+</mapper>
