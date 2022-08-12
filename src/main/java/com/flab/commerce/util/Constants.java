@@ -8,8 +8,6 @@ public class Constants {
 
   public static final String ROLE_OWNER = "ROLE_OWNER";
 
-  public static final String OWNER = "OWNER";
-
   public static final String MUST_NOT_BE_BLANK = "must not be blank";
 
   public static final String UTF_8 = "UTF-8";

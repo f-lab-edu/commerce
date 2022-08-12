@@ -36,7 +36,7 @@ public class WithMockDetailsSecurityContextFactory implements
   }
 
   private UserDetails getUserDetails(String rule) {
-    if (Constants.OWNER.equals(rule)) {
+    if (Constants.ROLE_OWNER.equals(rule)) {
       return getOwnerDetails();
     }
     return getGeneralUserDetails();

@@ -9,7 +9,7 @@ public class MenuService {
 
   private final MenuMapper menuMapper;
 
-  public boolean registerMenu(Menu menu) {
-    return menuMapper.register(menu) == 1;
+  public void registerMenu(Menu menu) {
+    menuMapper.register(menu);
   }
 }

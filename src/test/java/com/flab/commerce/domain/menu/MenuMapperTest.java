@@ -75,7 +75,7 @@ class MenuMapperTest {
   }
 
   @Test
-  void 메뉴등록_실패_가게에없는ID인경우() {
+  void 메뉴등록_DataIntegrityViolationException_존재하지않는가게ID() {
     // Given
     Menu menu = Menu.builder()
         .name("돈까스")

@@ -1,15 +1,18 @@
 package com.flab.commerce.domain.menu;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.owner.OwnerMapper;
-import com.flab.commerce.domain.store.StoreMapper;
+import com.flab.commerce.domain.store.StoreService;
 import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.exception.BadInputException;
 import com.flab.commerce.security.WithMockDetails;
 import com.flab.commerce.util.Constants;
 import java.util.UUID;
@@ -19,11 +22,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = MenuController.class)
 @ComponentScan(basePackages = "com.flab.commerce.security")
-@WithMockDetails(rule = Constants.OWNER)
+@WithMockDetails(rule = Constants.ROLE_OWNER)
 class MenuControllerTest {
 
   @Autowired
@@ -39,7 +43,7 @@ class MenuControllerTest {
   MenuMapper menuMapper;
 
   @MockBean
-  StoreMapper storeMapper;
+  StoreService storeService;
 
   @MockBean
   OwnerMapper ownerMapper;
@@ -57,17 +61,15 @@ class MenuControllerTest {
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
 
-    // When
-    when(storeMapper.idExists(any())).thenReturn(true);
-    when(storeMapper.idAndOwnerIdExists(any(), any())).thenReturn(true);
-    when(menuService.registerMenu(any(Menu.class))).thenReturn(true);
-
     // Then
     mockMvc.perform(post("/stores/0/menus")
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
         .andDo(print())
         .andExpect(status().isCreated());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService).registerMenu(any());
   }
 
   @Test
@@ -81,8 +83,8 @@ class MenuControllerTest {
     String body = objectMapper.writeValueAsString(menuRegisterDto);
 
     // When
-    when(storeMapper.idExists(any())).thenReturn(true);
-    when(storeMapper.idAndOwnerIdExists(any(), any())).thenReturn(false);
+    doThrow(AccessDeniedException.class).when(storeService)
+        .validateOwnerStore(any(), any());
 
     // Then
     mockMvc.perform(post("/stores/51/menus")
@@ -90,6 +92,9 @@ class MenuControllerTest {
             .content(body))
         .andDo(print())
         .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService, never()).registerMenu(any());
   }
 
   @Test
@@ -103,14 +108,17 @@ class MenuControllerTest {
     String body = objectMapper.writeValueAsString(menuRegisterDto);
 
     // When
-    when(storeMapper.idExists(any())).thenReturn(false);
-
+    doThrow(BadInputException.class).when(storeService)
+        .validateOwnerStore(any(), any());
     // Then
     mockMvc.perform(post("/stores/51/menus")
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
         .andDo(print())
         .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService, never()).registerMenu(any());
   }
 
   @Test
@@ -129,28 +137,7 @@ class MenuControllerTest {
             .content(body))
         .andDo(print())
         .andExpect(status().isBadRequest());
-  }
-
-  @Test
-  void 메뉴등록_500_서버에러() throws Exception {
-    // Given
-    MenuRegisterDto menuRegisterDto = MenuRegisterDto.builder()
-        .name("메뉴1")
-        .price(1000L)
-        .image(UUID.randomUUID() + ".jpg")
-        .build();
-    String body = objectMapper.writeValueAsString(menuRegisterDto);
-
-    // When
-    when(storeMapper.idExists(any())).thenReturn(true);
-    when(storeMapper.idAndOwnerIdExists(any(), any())).thenReturn(true);
-    when(menuService.registerMenu(any(Menu.class))).thenReturn(false);
-
-    // Then
-    mockMvc.perform(post("/stores/51/menus")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body))
-        .andDo(print())
-        .andExpect(status().isInternalServerError());
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(menuService, never()).registerMenu(any());
   }
 }
