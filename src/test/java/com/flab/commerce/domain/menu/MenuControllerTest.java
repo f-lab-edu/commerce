@@ -322,14 +322,14 @@ class MenuControllerTest {
   }
 
   @Test
-  void 메뉴삭제_400_가게의메뉴가아닌경우() throws Exception {
+  void 메뉴삭제_401_가게의메뉴가아닌경우() throws Exception {
     // When
-    doThrow(BadInputException.class).when(menuService).validateMenu(any(), any());
+    doThrow(AccessDeniedException.class).when(menuService).validateMenu(any(), any());
     // Then
     mockMvc.perform(delete("/stores/51/menus/1")
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isUnauthorized());
 
     verify(storeService).validateOwnerStore(any(), any());
     verify(menuService).validateMenu(any(), any());
