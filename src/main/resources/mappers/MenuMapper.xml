@@ -27,6 +27,16 @@
   </delete>
 
   <select id="idAndStoreIdExists" resultType="com.flab.commerce.domain.menu.Menu">
-    SELECT EXISTS(SELECT 1 FROM menu WHERE id = #{id} AND store_id = #{storeId})
+    SELECT EXISTS(SELECT 1 FROM menu WHERE id = #{id} AND store_id = #{storeId});
   </select>
+
+  <update id="patch" parameterType="com.flab.commerce.domain.menu.Menu">
+    UPDATE menu
+    SET
+    <if test="name != null and name != ''">name = #{name},</if>
+    <if test="image != null and image != ''">image = #{image},</if>
+    <if test="price != null">price = #{price},</if>
+    modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
 </mapper>
