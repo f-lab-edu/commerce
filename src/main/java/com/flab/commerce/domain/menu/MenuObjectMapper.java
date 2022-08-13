@@ -16,4 +16,7 @@ public interface MenuObjectMapper {
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   Menu toEntity(MenuRegisterDto menuRegisterDto, Long storeId);
+
+  @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
+  Menu toEntity(MenuPatchDto menuPatchDto, Long id);
 }
