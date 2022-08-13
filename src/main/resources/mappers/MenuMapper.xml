@@ -19,4 +19,15 @@
     FROM menu
     WHERE store_id = #{storeId};
   </select>
+
+  <delete id="deleteByIdAndStoreId">
+    DELETE
+    FROM menu
+    WHERE id = #{id}
+      AND store_id = #{storeId};
+  </delete>
+
+  <select id="idAndStoreIdExists" resultType="com.flab.commerce.domain.menu.Menu">
+    SELECT EXISTS(SELECT 1 FROM menu WHERE id = #{id} AND store_id = #{storeId})
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,25 +39,25 @@ import org.springframework.test.web.servlet.MockMvc;
 class MenuControllerTest {
 
   @Autowired
-  MockMvc mockMvc;
+  private MockMvc mockMvc;
 
   @Autowired
   ObjectMapper objectMapper;
 
   @MockBean
-  StoreService storeService;
-
-  @MockBean
   MenuService menuService;
 
   @MockBean
-  MenuMapper menuMapper;
+  StoreService storeService;
 
   @MockBean
   OwnerMapper ownerMapper;
 
   @MockBean
   UserMapper userMapper;
+
+  @MockBean
+  MenuMapper menuMapper;
 
   void 메뉴등록_201() throws Exception {
     // Given
@@ -232,5 +233,106 @@ class MenuControllerTest {
 
     verify(storeService).validateStoreExistence(any());
     verify(menuService, never()).getMenus(any());
+  }
+
+  @Test
+  void 메뉴삭제_200() throws Exception {
+    // Then
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService).validateMenu(any(), any());
+    verify(menuService).deleteMenu(any(), any());
+  }
+
+  @Test
+  @WithMockUser
+  void 메뉴삭제_403_사용자권한() throws Exception {
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(menuService, never()).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 메뉴삭제_403_익명사용자() throws Exception {
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(menuService, never()).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
+  }
+
+  @Test
+  void 메뉴삭제_400_가게id가존재하지않을경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService, never()).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
+  }
+
+  @Test
+  void 메뉴삭제_401_다른사장님의가게() throws Exception {
+    // When
+    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService, never()).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
+  }
+
+  @Test
+  void 메뉴삭제_400_메뉴id가존재하지않는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(menuService).validateMenu(any(), any());
+    // Then
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
+  }
+
+  @Test
+  void 메뉴삭제_400_가게의메뉴가아닌경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(menuService).validateMenu(any(), any());
+    // Then
+    mockMvc.perform(delete("/stores/51/menus/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(menuService).validateMenu(any(), any());
+    verify(menuService, never()).deleteMenu(any(), any());
   }
 }
