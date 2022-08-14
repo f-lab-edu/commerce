@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flab.commerce.domain.optiongroup.OptionGroupMapper">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id"
+    parameterType="com.flab.commerce.domain.optiongroup.OptionGroup">
+    INSERT INTO option_group (name, store_id, create_date_time, modify_date_time)
+    VALUES (#{name}, #{storeId}, #{createDateTime}, #{modifyDateTime});
+  </insert>
+</mapper>
