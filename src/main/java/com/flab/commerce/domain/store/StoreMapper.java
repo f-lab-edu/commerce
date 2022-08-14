@@ -6,4 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface StoreMapper {
 
     int register(Store newStore);
+
+    boolean idExists(Long id);
+
+    boolean idAndOwnerIdExists(Long storeId, Long ownerId);
 }
