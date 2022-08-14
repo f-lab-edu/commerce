@@ -18,7 +18,7 @@ class StoreMapperTest {
     @Autowired
     private StoreMapper mapper;
 
-    @Autowired
+@Autowired
     private OwnerMapper ownerMapper;
 
     @Test

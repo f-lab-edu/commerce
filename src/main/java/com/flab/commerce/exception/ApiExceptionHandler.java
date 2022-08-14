@@ -1,5 +1,9 @@
 package com.flab.commerce.exception;
 
+
+import static com.flab.commerce.util.Constants.JSON_PROCESSING_EXCEPTION_MESSAGE;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+  @ExceptionHandler(JsonProcessingException.class)
+  public ResponseEntity<Object> handleJsonProcessingException(JsonProcessingException ex) {
+    return ResponseEntity.badRequest().body(JSON_PROCESSING_EXCEPTION_MESSAGE);
+  }
+  
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -28,6 +37,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     final String defaultMessage = fieldError.getDefaultMessage();
     return super.handleExceptionInternal(ex, defaultMessage, headers, status, request);
   }
+
 
   @ExceptionHandler
   public ResponseEntity<Object> handleException(Exception ex) throws Exception {
@@ -39,4 +49,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       throw ex;
     }
   }
+
 }

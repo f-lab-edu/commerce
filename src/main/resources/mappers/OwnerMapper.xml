@@ -5,7 +5,7 @@
 
   <insert id="register" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO owner(email, password, name, phone, create_date_time, update_date_time)
-    VALUES (#{email}, #{password}, #{name}, #{phone}, #{createDateTime}, #{updateDateTime})
+    VALUES (#{email}, #{password}, #{name}, #{phone}, #{createDateTime}, #{updateDateTime});
   </insert>
 
   <select id="findByEmail" resultType="com.flab.commerce.domain.owner.Owner">

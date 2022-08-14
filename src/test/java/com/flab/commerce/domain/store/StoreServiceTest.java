@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 
+
 @ExtendWith(MockitoExtension.class)
 class StoreServiceTest {
 
