@@ -34,7 +34,7 @@ class OptionGroupMapperTest {
 
   @Test
   void 옵션그룹저장_1(){
-    // Given
+    // given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
         .password("1234")
@@ -73,7 +73,7 @@ class OptionGroupMapperTest {
 
   @Test
   void 옵션그룹저장_DataIntegrityViolationException_컬럼NotNull(){
-    // Given
+    // given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
         .password("1234")
