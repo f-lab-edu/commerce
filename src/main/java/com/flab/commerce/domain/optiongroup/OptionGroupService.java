@@ -1,5 +1,6 @@
 package com.flab.commerce.domain.optiongroup;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,9 @@ public class OptionGroupService {
 
   public void registerOptionGroup(OptionGroup optionGroup) {
     optionGroupMapper.save(optionGroup);
+  }
+
+  public List<OptionGroup> getOptionGroups(Long storeId) {
+    return optionGroupMapper.findByStoreId(storeId);
   }
 }

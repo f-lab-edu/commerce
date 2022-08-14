@@ -10,6 +10,8 @@ import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -107,5 +109,107 @@ class OptionGroupMapperTest {
 
     // Then
     assertThat(throwable).isInstanceOf(DataIntegrityViolationException.class);
+  }
+  
+  @Test
+  void 가게id로옵션그룹찾기_OptionGroups(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store1 = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store1);
+
+    Store store2 = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store2);
+
+    OptionGroup optionGroup1 = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store1.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup1);
+    
+    OptionGroup optionGroup2 = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store1.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup2);
+
+    OptionGroup optionGroup3 = OptionGroup.builder()
+        .name("옵션그룹3")
+        .storeId(store2.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup3);
+
+    // When
+    List<OptionGroup> optionGroups = optionGroupMapper.findByStoreId(store1.getId());
+    List<Long> ids = optionGroups.stream().map(OptionGroup::getId).collect(Collectors.toList());
+
+    // Then
+    assertThat(optionGroups).hasSize(2);
+    assertThat(ids).contains(optionGroup1.getId(), optionGroup2.getId());
+  }
+
+  @Test
+  void 가게id로옵션그룹찾기_empty_가게의옵셥그룹이없는경우(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    // When
+    List<OptionGroup> optionGroups = optionGroupMapper.findByStoreId(store.getId());
+
+    // Then
+    assertThat(optionGroups).isEmpty();
   }
 }
