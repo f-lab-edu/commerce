@@ -1,5 +1,6 @@
 package com.flab.commerce.domain.optiongroup;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -13,4 +14,6 @@ public interface OptionGroupObjectMapper {
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   OptionGroup toEntity(OptionGroupRegisterDto optionGroupRegisterDto, Long storeId);
+
+  List<OptionGroupReadDto> toDto(List<OptionGroup> optionGroups);
 }

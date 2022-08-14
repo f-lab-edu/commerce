@@ -8,4 +8,11 @@
     INSERT INTO option_group (name, store_id, create_date_time, modify_date_time)
     VALUES (#{name}, #{storeId}, #{createDateTime}, #{modifyDateTime});
   </insert>
+
+  <select id="findByStoreId" resultType="com.flab.commerce.domain.optiongroup.OptionGroup"
+    parameterType="java.lang.Long">
+    SELECT *
+    FROM option_group
+    WHERE store_id = #{storeId};
+  </select>
 </mapper>
