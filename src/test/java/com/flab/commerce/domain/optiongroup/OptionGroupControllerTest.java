@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -252,5 +253,110 @@ class OptionGroupControllerTest {
 
     verify(storeService).validateOwnerStore(any(), any());
     verify(optionGroupService, never()).getOptionGroups(any());
+  }
+
+  @Test
+  void 옵션그룹삭제_200() throws Exception {
+
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService).deleteOptionGroup(any());
+  }
+
+  @Test
+  @WithMockUser
+  void 옵션그룹삭제_403_사용자권한() throws Exception {
+
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).deleteOptionGroup(any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 옵션그룹삭제_403_익명사용자권한() throws Exception {
+
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).deleteOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹삭제_400_가게가없는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).deleteOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹삭제_401_다른사장님의가게() throws Exception {
+    // When
+    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).deleteOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹삭제_400_옵션그룹이없는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(optionGroupService).validateOptionGroupStore(any(), any());
+
+    // Then
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).deleteOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹삭제_400_다른가게의옵션그룹일경우() throws Exception {
+    // When
+    doThrow(AccessDeniedException.class).when(optionGroupService).deleteOptionGroup(any());
+
+    // Then
+    mockMvc.perform(delete("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService).deleteOptionGroup(any());
   }
 }

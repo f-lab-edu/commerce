@@ -3,9 +3,11 @@ package com.flab.commerce.domain.optiongroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flab.commerce.exception.BadInputException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 
 @ExtendWith(MockitoExtension.class)
 class OptionGroupServiceTest {
@@ -95,5 +98,66 @@ class OptionGroupServiceTest {
     // Then
     verify(optionGroupMapper).findByStoreId(1L);
     assertThat(optionGroupsFound).isEmpty();
+  }
+
+  @Test
+  void 옵션그룹삭제_void() {
+    // When
+    when(optionGroupMapper.delete(1L)).thenReturn(1);
+    optionGroupService.deleteOptionGroup(1L);
+
+    // Then
+    verify(optionGroupMapper).delete(1L);
+  }
+
+  @Test
+  void 옵션그룹삭제_badInputException_삭제대상이없는경우() {
+    // When
+    when(optionGroupMapper.delete(1L)).thenReturn(0);
+    Throwable throwable = Assertions.catchThrowable(
+        () -> optionGroupService.deleteOptionGroup(1L));
+
+    // Then
+    assertThat(throwable).isInstanceOf(BadInputException.class);
+    verify(optionGroupMapper).delete(1L);
+  }
+
+  @Test
+  void 옵션그룹검증_void() {
+    // When
+    when(optionGroupMapper.idExists(any())).thenReturn(true);
+    when(optionGroupMapper.idAndStoreIdExists(any(), any())).thenReturn(true);
+    optionGroupService.validateOptionGroupStore(1L, 1L);
+
+    // Then
+    verify(optionGroupMapper).idExists(1L);
+    verify(optionGroupMapper).idAndStoreIdExists(1L, 1L);
+  }
+
+  @Test
+  void 옵션그룹검증_badInputException_옵션그룹이존재하지않는경우() {
+    // When
+    when(optionGroupMapper.idExists(any())).thenReturn(false);
+    Throwable throwable = Assertions.catchThrowable(
+        () -> optionGroupService.validateOptionGroupStore(1L, 1L));
+
+    // Then
+    assertThat(throwable).isInstanceOf(BadInputException.class);
+    verify(optionGroupMapper).idExists(1L);
+    verify(optionGroupMapper, never()).idAndStoreIdExists(1L, 1L);
+  }
+
+  @Test
+  void 옵션그룹검증_accessDeniedException_다른가게의옵션그룹일경우() {
+    // When
+    when(optionGroupMapper.idExists(any())).thenReturn(true);
+    when(optionGroupMapper.idAndStoreIdExists(any(), any())).thenReturn(false);
+    Throwable throwable = Assertions.catchThrowable(
+        () -> optionGroupService.validateOptionGroupStore(1L, 1L));
+
+    // Then
+    assertThat(throwable).isInstanceOf(AccessDeniedException.class);
+    verify(optionGroupMapper).idExists(1L);
+    verify(optionGroupMapper).idAndStoreIdExists(1L, 1L);
   }
 }

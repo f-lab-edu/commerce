@@ -9,4 +9,10 @@ public interface OptionGroupMapper {
   int save(OptionGroup optionGroup);
 
   List<OptionGroup> findByStoreId(Long storeId);
+
+  int delete(Long id);
+
+  boolean idExists(Long id);
+
+  boolean idAndStoreIdExists(Long id, Long storeId);
 }

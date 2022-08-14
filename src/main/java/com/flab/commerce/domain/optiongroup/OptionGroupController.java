@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class OptionGroupController {
 
   @GetMapping
   public ResponseEntity<List<OptionGroupReadDto>> getOptionGroup(@PathVariable Long storeId,
-      @AuthenticationPrincipal OwnerDetails ownerDetails){
+      @AuthenticationPrincipal OwnerDetails ownerDetails) {
 
     storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
 
@@ -49,5 +50,18 @@ public class OptionGroupController {
         optionGroups);
 
     return ResponseEntity.ok().body(optionGroupReadDtos);
+  }
+
+  @DeleteMapping("/{optionGroupId}")
+  public ResponseEntity<Void> deleteOptionGroup(@PathVariable Long storeId,
+      @PathVariable Long optionGroupId, @AuthenticationPrincipal OwnerDetails ownerDetails) {
+
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+
+    optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
+
+    optionGroupService.deleteOptionGroup(optionGroupId);
+
+    return ResponseEntity.ok().build();
   }
 }
