@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +36,23 @@ public class OptionController {
     optionService.registerOption(option);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PutMapping("/{optionId}")
+  public ResponseEntity<Void> updateOption(@PathVariable Long storeId,
+      @PathVariable Long optionGroupId, @PathVariable Long optionId,
+      @Valid @RequestBody OptionUpdateDto optionUpdateDto,
+      @AuthenticationPrincipal OwnerDetails ownerDetails) {
+
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+
+    optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
+
+    optionService.validate(optionId, optionGroupId);
+
+    Option option = OptionObjectMapper.INSTANCE.toEntity(optionUpdateDto, optionId, optionGroupId);
+    optionService.updateOption(option);
+
+    return ResponseEntity.ok().build();
   }
 }

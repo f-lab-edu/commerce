@@ -15,4 +15,21 @@
     FROM options
     WHERE id = #{id};
   </select>
+
+  <update id="update" parameterType="com.flab.commerce.domain.option.Option">
+    UPDATE options
+    SET name             = #{name},
+        price            = #{price},
+        modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
+
+  <select id="idExists" resultType="java.lang.Boolean" parameterType="java.lang.Long">
+    SELECT EXISTS(SELECT 1 FROM options WHERE id = #{id});
+  </select>
+
+  <select id="idAndOptionGroupIdExists" resultType="java.lang.Boolean"
+    parameterType="java.lang.Long">
+    SELECT EXISTS(SELECT 1 FROM options WHERE id = #{id} AND option_group_id = #{optionGroupId});
+  </select>
 </mapper>

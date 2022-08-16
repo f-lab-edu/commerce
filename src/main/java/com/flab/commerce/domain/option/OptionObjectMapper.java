@@ -13,4 +13,8 @@ public interface OptionObjectMapper {
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   Option toEntity(OptionRegisterDto optionRegisterDto, Long optionGroupId);
+
+  @Mapping(target = "createDateTime", ignore = true)
+  @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
+  Option toEntity(OptionUpdateDto optionUpdateDto, Long id, Long optionGroupId);
 }

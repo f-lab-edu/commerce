@@ -1,10 +1,12 @@
 package com.flab.commerce.domain.option;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flab.commerce.exception.BadInputException;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import org.assertj.core.api.Assertions;
@@ -53,5 +55,25 @@ class OptionServiceTest {
 
     // Then
     assertThat(throwable).isInstanceOf(DataIntegrityViolationException.class);
+  }
+
+  @Test
+  void 옵션수정_void(){
+    // When
+    when(optionMapper.update(any())).thenReturn(1);
+    optionService.updateOption(any());
+
+    // Then
+    verify(optionMapper).update(any());
+  }
+
+  @Test
+  void 옵션수정_badInputException_업데이트못한경우(){
+    // When
+    when(optionMapper.update(any())).thenReturn(0);
+    Exception exception = catchException(() -> optionService.updateOption(any()));
+
+    // Then
+    assertThat(exception).isInstanceOf(BadInputException.class);
   }
 }
