@@ -197,4 +197,138 @@ class OptionMapperTest {
     // Then
     assertThat(exception).isInstanceOf(DataIntegrityViolationException.class);
   }
+
+  @Test
+  void 옵션업데이트_1(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+
+    Option updateOption = Option.builder()
+        .id(option.getId())
+        .name("옵션2")
+        .price(BigInteger.valueOf(1001))
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    int update = optionMapper.update(updateOption);
+    Option updatedOption = optionMapper.findById(option.getId());
+
+    // Then
+    assertThat(update).isOne();
+    assertThat(updatedOption.getName()).isEqualTo(updateOption.getName());
+    assertThat(updatedOption.getPrice()).isEqualTo(updateOption.getPrice());
+
+    assertThat(updatedOption.getName()).isNotEqualTo(option.getName());
+    assertThat(updatedOption.getPrice()).isNotEqualTo(option.getPrice());
+  }
+
+  @Test
+  void 옵션업데이트_0_옵션이존재하지않는경우(){
+    Option updateOption = Option.builder()
+        .id(-1L)
+        .name("옵션2")
+        .price(BigInteger.valueOf(1001))
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    int update = optionMapper.update(updateOption);
+
+    // Then
+    assertThat(update).isZero();
+  }
+
+  @Test
+  void 옵션업데이트_dataIntegrityViolationException_컬럼NotNull예외(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+
+    Option updateOption = Option.builder()
+        .id(option.getId())
+        .name(null)
+        .price(BigInteger.valueOf(1001))
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    Exception exception = catchException(() -> optionMapper.update(updateOption));
+
+    // Then
+    assertThat(exception).isInstanceOf(DataIntegrityViolationException.class);
+  }
 }

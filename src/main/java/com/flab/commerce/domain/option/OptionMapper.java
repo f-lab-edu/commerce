@@ -8,4 +8,10 @@ public interface OptionMapper {
   int save(Option option);
 
   Option findById(Long id);
+
+  int update(Option option);
+
+  boolean idExists(Long id);
+
+  boolean idAndOptionGroupIdExists(Long id, Long optionGroupId);
 }
