@@ -35,4 +35,10 @@ public class OptionGroupService {
     }
     // TODO 메뉴에서 사용하고 있는 옵션 그룹이 있는지 검증한다.
   }
+
+  public void updateOptionGroup(OptionGroup optionGroup){
+    if (optionGroupMapper.update(optionGroup) == 0){
+      throw new BadInputException("옵션 그룹을 찾을 수 없습니다.");
+    }
+  }
 }

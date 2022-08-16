@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -358,5 +359,123 @@ class OptionGroupControllerTest {
     verify(storeService).validateOwnerStore(any(), any());
     verify(optionGroupService).validateOptionGroupStore(any(), any());
     verify(optionGroupService).deleteOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹수정_200() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    // Then
+    mockMvc.perform(put("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService).updateOptionGroup(any());
+  }
+
+  @Test
+  @WithMockUser
+  void 옵션그룹수정_403_사용자권한() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    // Then
+    mockMvc.perform(put("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).updateOptionGroup(any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 옵션그룹수정_403_익명사용자권한() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    // Then
+    mockMvc.perform(put("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).updateOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹수정_400_가게가없는경우() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    // When
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(put("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).updateOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹수정_401_사장님의가게가아닌경우() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+
+    // Then
+    mockMvc.perform(post("/stores/51/option-groups")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).updateOptionGroup(any());
+  }
+
+  @Test
+  void 옵션그룹수정_400_옵션그룹이없는경우() throws Exception {
+    // Given
+    OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
+    String body = objectMapper.writeValueAsString(updateDto);
+
+    // When
+    doThrow(BadInputException.class).when(optionGroupService).validateOptionGroupStore(any(), any());
+
+    // Then
+    mockMvc.perform(put("/stores/1/option-groups/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).updateOptionGroup(any());
   }
 }

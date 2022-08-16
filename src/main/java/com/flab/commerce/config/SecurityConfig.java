@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/stores/*/option-groups").hasAuthority(ROLE_OWNER)
         .antMatchers(HttpMethod.GET, "/stores/*/option-groups").hasAuthority(ROLE_OWNER)
         .antMatchers(HttpMethod.DELETE, "/stores/*/option-groups/*").hasAuthority(ROLE_OWNER)
+        .antMatchers(HttpMethod.PUT, "/stores/*/option-groups/*").hasAuthority(ROLE_OWNER)
         .anyRequest().authenticated()
         .and()
         .addFilterBefore(generalAuthenticationProcessingFilter,
