@@ -331,4 +331,64 @@ class OptionMapperTest {
     // Then
     assertThat(exception).isInstanceOf(DataIntegrityViolationException.class);
   }
+
+  @Test
+  void 옵션삭제_1(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+
+    // When
+    int countDeleted = optionMapper.delete(option.getId());
+    boolean exists = optionMapper.idExists(option.getId());
+
+    assertThat(countDeleted).isOne();
+    assertThat(exists).isFalse();
+  }
+
+  @Test
+  void 옵션삭제_0_옵션이존재하지않는경우(){
+    // When
+    int countDeleted = optionMapper.delete(-1L);
+    boolean exists = optionMapper.idExists(-1L);
+
+    assertThat(countDeleted).isZero();
+    assertThat(exists).isFalse();
+  }
 }

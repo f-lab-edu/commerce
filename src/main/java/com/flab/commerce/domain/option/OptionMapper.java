@@ -14,4 +14,6 @@ public interface OptionMapper {
   boolean idExists(Long id);
 
   boolean idAndOptionGroupIdExists(Long id, Long optionGroupId);
+
+  int delete(Long id);
 }

@@ -32,4 +32,10 @@
     parameterType="java.lang.Long">
     SELECT EXISTS(SELECT 1 FROM options WHERE id = #{id} AND option_group_id = #{optionGroupId});
   </select>
+
+  <delete id="delete" parameterType="java.lang.Long">
+    DELETE
+    FROM options
+    WHERE id = #{id};
+  </delete>
 </mapper>

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +53,22 @@ public class OptionController {
 
     Option option = OptionObjectMapper.INSTANCE.toEntity(optionUpdateDto, optionId, optionGroupId);
     optionService.updateOption(option);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @DeleteMapping("/{optionId}")
+  public ResponseEntity<Void> updateOption(@PathVariable Long storeId,
+      @PathVariable Long optionGroupId, @PathVariable Long optionId,
+      @AuthenticationPrincipal OwnerDetails ownerDetails) {
+
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+
+    optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
+
+    optionService.validate(optionId, optionGroupId);
+
+    optionService.deleteOption(optionId);
 
     return ResponseEntity.ok().build();
   }

@@ -28,4 +28,10 @@ public class OptionService {
       throw new BadInputException("옵션그룹의 옵션이 아닙니다.");
     }
   }
+
+  public void deleteOption(Long optionId) {
+    if (optionMapper.delete(optionId) == 0) {
+      throw new BadInputException("옵션을 찾을 수 없습니다.");
+    }
+  }
 }
