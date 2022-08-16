@@ -76,4 +76,24 @@ class OptionServiceTest {
     // Then
     assertThat(exception).isInstanceOf(BadInputException.class);
   }
+
+  @Test
+  void 옵션삭제_void(){
+    // When
+    when(optionMapper.delete(any())).thenReturn(1);
+    optionService.deleteOption(any());
+
+    // Then
+    verify(optionMapper).delete(any());
+  }
+
+  @Test
+  void 옵션삭제_badInputException_식제못한경우(){
+    // When
+    when(optionMapper.delete(any())).thenReturn(0);
+    Exception exception = catchException(() -> optionService.deleteOption(any()));
+
+    // Then
+    assertThat(exception).isInstanceOf(BadInputException.class);
+  }
 }
