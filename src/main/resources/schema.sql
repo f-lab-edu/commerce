@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS menu;
+DROP TABLE IF EXISTS options;
 DROP TABLE IF EXISTS option_group;
 DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS owner;
@@ -69,4 +70,16 @@ CREATE TABLE option_group
     modify_date_time timestamp   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (store_id) REFERENCES store (id)
+);
+
+CREATE TABLE options
+(
+    id               INT(11)     NOT NULL AUTO_INCREMENT,
+    name             VARCHAR(50) NOT NULL,
+    price            VARCHAR(50) NOT NULL,
+    option_group_id  INT(11)     NOT NULL,
+    create_date_time timestamp   NOT NULL,
+    modify_date_time timestamp   NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (option_group_id) REFERENCES option_group (id)
 );
