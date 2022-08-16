@@ -488,4 +488,102 @@ class OptionGroupMapperTest {
     // Then
     assertThat(exists).isFalse();
   }
+
+  @Test
+  void 업데이트_1(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    OptionGroup update = OptionGroup.builder()
+        .id(optionGroup.getId())
+        .name("업데이트 옵션그룹")
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    int countUpdated = optionGroupMapper.update(update);
+    OptionGroup updated = optionGroupMapper.findById(optionGroup.getId());
+
+    // Then
+    assertThat(countUpdated).isOne();
+    assertThat(updated.getName()).isEqualTo(update.getName());
+    assertThat(updated.getName()).isNotEqualTo(optionGroup.getName());
+  }
+
+  @Test
+  void 업데이트_0_옵션그룹이존재하지않는겨우(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    OptionGroup update = OptionGroup.builder()
+        .id(-1L)
+        .name("업데이트 옵션그룹")
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    int countUpdated = optionGroupMapper.update(update);
+    OptionGroup updated = optionGroupMapper.findById(optionGroup.getId());
+
+    // Then
+    assertThat(countUpdated).isZero();
+    assertThat(updated.getName()).isNotEqualTo(update.getName());
+    assertThat(updated.getName()).isEqualTo(optionGroup.getName());
+  }
 }

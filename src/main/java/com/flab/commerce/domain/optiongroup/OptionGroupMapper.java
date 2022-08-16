@@ -15,4 +15,8 @@ public interface OptionGroupMapper {
   boolean idExists(Long id);
 
   boolean idAndStoreIdExists(Long id, Long storeId);
+
+  int update(OptionGroup optionGroup);
+
+  OptionGroup findById(Long id);
 }

@@ -15,4 +15,41 @@
     FROM option_group
     WHERE store_id = #{storeId};
   </select>
+
+  <delete id="delete" parameterType="java.lang.Long">
+    DELETE
+    FROM option_group
+    WHERE id = #{id};
+  </delete>
+
+  <select id="idExists" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+    SELECT EXISTS(
+             SELECT id
+             FROM option_group
+             WHERE id = #{id}
+             );
+  </select>
+
+  <select id="idAndStoreIdExists" resultType="java.lang.Boolean">
+    SELECT EXISTS(
+             SELECT id
+             FROM option_group
+             WHERE id = #{id}
+               AND store_id = #{storeId}
+             );
+  </select>
+
+  <update id="update" parameterType="com.flab.commerce.domain.optiongroup.OptionGroup">
+    UPDATE option_group
+    SET name             = #{name},
+        modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
+
+  <select id="findById" resultType="com.flab.commerce.domain.optiongroup.OptionGroup"
+    parameterType="java.lang.Long">
+    SELECT *
+    FROM option_group
+    WHERE id = #{id};
+  </select>
 </mapper>

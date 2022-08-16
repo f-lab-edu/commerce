@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.optiongroup;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -159,5 +160,26 @@ class OptionGroupServiceTest {
     assertThat(throwable).isInstanceOf(AccessDeniedException.class);
     verify(optionGroupMapper).idExists(1L);
     verify(optionGroupMapper).idAndStoreIdExists(1L, 1L);
+  }
+
+  @Test
+  void 옵션그룹수정_void() {
+    // When
+    when(optionGroupMapper.update(any())).thenReturn(1);
+    optionGroupService.updateOptionGroup(any());
+
+    // Then
+    verify(optionGroupMapper).update(any());
+  }
+
+  @Test
+  void 옵션그룹수정_badInputException_옵션그룹을찾을수없는경우() {
+    // When
+    when(optionGroupMapper.update(any())).thenReturn(0);
+    Exception exception = catchException(() -> optionGroupService.updateOptionGroup(any()));
+
+    // Then
+    assertThat(exception).isInstanceOf(BadInputException.class);
+    verify(optionGroupMapper).update(any());
   }
 }
