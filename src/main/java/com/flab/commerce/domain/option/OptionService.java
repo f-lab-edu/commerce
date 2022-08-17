@@ -34,4 +34,12 @@ public class OptionService {
       throw new BadInputException("옵션을 찾을 수 없습니다.");
     }
   }
+
+  public Option getOption(Long optionId) {
+    Option optionFound = optionMapper.findById(optionId);
+    if (optionFound == null) {
+      throw new BadInputException("옵션을 찾을 수 없습니다.");
+    }
+    return optionFound;
+  }
 }
