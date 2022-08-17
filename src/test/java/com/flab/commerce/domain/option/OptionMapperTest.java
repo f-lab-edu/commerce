@@ -391,4 +391,177 @@ class OptionMapperTest {
     assertThat(countDeleted).isZero();
     assertThat(exists).isFalse();
   }
+
+  @Test
+  void findById_option(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+    // When
+    Option foundOption = optionMapper.findById(option.getId());
+
+    // Then
+    assertThat(foundOption.getName()).isEqualTo(option.getName());
+    assertThat(foundOption.getPrice()).isEqualTo(option.getPrice());
+    assertThat(foundOption.getOptionGroupId()).isEqualTo(option.getOptionGroupId());
+  }
+
+  @Test
+  void findById_null_옵션이존재하지않는경우(){
+    // When
+    Option foundOption = optionMapper.findById(-1L);
+
+    // Then
+    assertThat(foundOption).isNull();
+  }
+
+  @Test
+  void 아이디가존재한다_ture(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+    // When
+    boolean exists = optionMapper.idExists(option.getId());
+
+    // Then
+    assertThat(exists).isTrue();
+  }
+
+  @Test
+  void 아이디가존재한다_false(){
+    // When
+    boolean exists = optionMapper.idExists(-1L);
+
+    // Then
+    assertThat(exists).isFalse();
+  }
+
+  @Test
+  void 아이디와옵션그룹아이디가존재한다_ture(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+    // When
+    boolean exists = optionMapper.idAndOptionGroupIdExists(option.getId(), optionGroup.getId());
+
+    // Then
+    assertThat(exists).isTrue();
+  }
+
+  @Test
+  void 아이디와옵션그룹아이디가존재한다_false(){
+    // When
+    boolean exists = optionMapper.idAndOptionGroupIdExists(-1L, -1L);
+
+    // Then
+    assertThat(exists).isFalse();
+  }
 }

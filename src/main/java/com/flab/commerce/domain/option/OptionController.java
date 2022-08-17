@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -71,5 +72,21 @@ public class OptionController {
     optionService.deleteOption(optionId);
 
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{optionId}")
+  public ResponseEntity<OptionResponseDto> getOption(@PathVariable Long storeId,
+      @PathVariable Long optionGroupId, @PathVariable Long optionId,
+      @AuthenticationPrincipal OwnerDetails ownerDetails) {
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+
+    optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
+
+    optionService.validate(optionId, optionGroupId);
+
+    Option option = optionService.getOption(optionId);
+    OptionResponseDto responseDto = OptionObjectMapper.INSTANCE.toDto(option);
+
+    return ResponseEntity.ok(responseDto);
   }
 }

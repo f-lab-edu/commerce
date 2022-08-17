@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -505,5 +506,133 @@ class OptionControllerTest {
     verify(optionGroupService).validateOptionGroupStore(3L, 2L);
     verify(optionService).validate(4L, 3L);
     verify(optionService, never()).deleteOption(any());
+  }
+
+  @Test
+  void 옵션삭제_401_옵션그룹의옵션이아닌경우() throws Exception {
+    // When
+    doThrow(AccessDeniedException.class).when(optionService)
+        .validate(any(), any());
+
+    mockMvc.perform(delete("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService).validateOptionGroupStore(3L, 2L);
+    verify(optionService).validate(4L, 3L);
+    verify(optionService, never()).deleteOption(any());
+  }
+
+  @Test
+  void getOption_200() throws Exception {
+    // When
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService).validateOptionGroupStore(3L, 2L);
+    verify(optionService).validate(4L, 3L);
+    verify(optionService).getOption(any());
+  }
+
+  @Test
+  @WithMockUser
+  void getOption_403_사용자권한() throws Exception {
+    // When
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(1L, 2L);
+    verify(optionGroupService, never()).validateOptionGroupStore(3L, 2L);
+    verify(optionService, never()).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void getOption_403_익명사용자권한() throws Exception {
+    // When
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(1L, 2L);
+    verify(optionGroupService, never()).validateOptionGroupStore(3L, 2L);
+    verify(optionService, never()).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
+  }
+
+  @Test
+  void getOption_400_가게가존재하지않는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(storeService)
+        .validateOwnerStore(any(), any());
+
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService, never()).validateOptionGroupStore(3L, 2L);
+    verify(optionService, never()).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
+  }
+
+  @Test
+  void getOption_401_가게의사장님이아닌경우() throws Exception {
+    // When
+    doThrow(AccessDeniedException.class).when(storeService)
+        .validateOwnerStore(any(), any());
+
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService, never()).validateOptionGroupStore(3L, 2L);
+    verify(optionService, never()).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
+  }
+
+  @Test
+  void getOption_400_옵션그룹이존재하지않는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(optionGroupService)
+        .validateOptionGroupStore(any(), any());
+
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService).validateOptionGroupStore(3L, 2L);
+    verify(optionService, never()).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
+  }
+
+  @Test
+  void getOption_400_다른가게의옵션그룹인경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(optionService).validate(any(), any());
+
+    mockMvc.perform(get("/stores/2/option-groups/3/options/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(1L, 2L);
+    verify(optionGroupService).validateOptionGroupStore(3L, 2L);
+    verify(optionService).validate(4L, 3L);
+    verify(optionService, never()).getOption(any());
   }
 }
