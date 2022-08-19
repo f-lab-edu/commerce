@@ -1,5 +1,6 @@
 package com.flab.commerce.domain.menu;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,9 @@ public class MenuService {
 
   public void registerMenu(Menu menu) {
     menuMapper.register(menu);
+  }
+
+  public List<Menu> getMenus(Long storeId) {
+    return menuMapper.findByStoreId(storeId);
   }
 }

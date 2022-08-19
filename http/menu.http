@@ -8,3 +8,7 @@ Content-Type: application/json
   "price": "1000",
   "image": "0cd3850e-daf7-4b04-8a7d-951b766ae4f9.png"
 }
+
+### 메뉴 목록조회
+GET http://localhost:8080/stores/1/menus
+Content-Type: application/json

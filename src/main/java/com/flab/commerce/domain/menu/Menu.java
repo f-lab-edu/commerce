@@ -1,6 +1,5 @@
 package com.flab.commerce.domain.menu;
 
-
 import com.flab.commerce.exception.BadInputException;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -22,7 +21,7 @@ public class Menu {
 
   private String name;
 
-  private Long price;
+  private BigDecimal price;
 
   private String image;
 
@@ -31,8 +30,6 @@ public class Menu {
   private ZonedDateTime createDateTime;
 
   private ZonedDateTime modifyDateTime;
-
-  private BigDecimal price;
 
   private List<MenuOptionGroup> groups;
 
