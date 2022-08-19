@@ -1,0 +1,10 @@
+### 메뉴 등록
+POST http://localhost:8080/stores/51/menus
+Set-Cookie: SESSION=N2JhM2ZjNmMtYjYwOS00Zjk2LWE5ZGMtZDg4MDM2NTM5ODg0; Path=/; HttpOnly; SameSite=Lax
+Content-Type: application/json
+
+{
+  "name": "메뉴이름",
+  "price": "1000",
+  "image": "0cd3850e-daf7-4b04-8a7d-951b766ae4f9.png"
+}

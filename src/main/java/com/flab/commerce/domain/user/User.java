@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User implements Serializable {
 
-  private String id;
+  private Long id;
 
   private String email;
 

@@ -1,7 +1,9 @@
 package com.flab.commerce.domain.menu;
 
+
 import com.flab.commerce.exception.BadInputException;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,18 @@ import lombok.NoArgsConstructor;
 public class Menu {
 
   private Long id;
+
+  private String name;
+
+  private Long price;
+
+  private String image;
+
+  private Long storeId;
+
+  private ZonedDateTime createDateTime;
+
+  private ZonedDateTime modifyDateTime;
 
   private BigDecimal price;
 
