@@ -2,6 +2,7 @@ package com.flab.commerce.config;
 
 import com.flab.commerce.security.GeneralAuthenticationProcessingFilter;
 import com.flab.commerce.security.GeneralLogoutSuccessHandler;
+import com.flab.commerce.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/owners", "/owners/login").permitAll()
         .antMatchers(HttpMethod.GET, "/owners/logout").permitAll()
         .antMatchers(HttpMethod.GET, "/stores/*/menus").permitAll()
+        .antMatchers(HttpMethod.POST, "/stores/*/menus").hasAuthority(Constants.ROLE_OWNER)
         .anyRequest().authenticated()
         .and()
         .addFilterBefore(generalAuthenticationProcessingFilter,

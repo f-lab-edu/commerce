@@ -8,6 +8,12 @@
     VALUES (#{name}, #{price}, #{image}, #{storeId}, #{createDateTime}, #{modifyDateTime})
   </insert>
 
+  <select id="findById" resultType="com.flab.commerce.domain.menu.Menu">
+    SELECT *
+    FROM menu
+    WHERE id = #{id};
+  </select>
+
   <select id="findByStoreId" resultType="com.flab.commerce.domain.menu.Menu">
     SELECT *
     FROM menu
