@@ -15,7 +15,7 @@ public class StoreService {
     return countInsertRow == 1;
   }
 
-  public void validateStore(Long storeId) {
+  public void validateStoreExistence(Long storeId) {
     if (!storeMapper.idExists(storeId)) {
       throw new BadInputException("해당 가게는 존재하지 않습니다.");
     }

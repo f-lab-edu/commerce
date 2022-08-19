@@ -68,7 +68,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStore(any());
+    verify(storeService).validateStoreExistence(any());
     verify(menuService).getMenus(any());
   }
 
@@ -87,7 +87,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStore(any());
+    verify(storeService).validateStoreExistence(any());
     verify(menuService).getMenus(any());
   }
 
@@ -106,7 +106,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStore(any());
+    verify(storeService).validateStoreExistence(any());
     verify(menuService).getMenus(any());
   }
 
@@ -121,14 +121,14 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStore(any());
+    verify(storeService).validateStoreExistence(any());
     verify(menuService).getMenus(any());
   }
 
   @Test
   void 메뉴목록조회_400_가게가없는경우() throws Exception {
     // When
-    doThrow(BadInputException.class).when(storeService).validateStore(any());
+    doThrow(BadInputException.class).when(storeService).validateStoreExistence(any());
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -136,7 +136,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateStore(any());
+    verify(storeService).validateStoreExistence(any());
     verify(menuService, never()).getMenus(any());
   }
 }

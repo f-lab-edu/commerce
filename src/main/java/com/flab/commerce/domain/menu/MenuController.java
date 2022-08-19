@@ -20,7 +20,7 @@ public class MenuController {
 
   @GetMapping
   public ResponseEntity<List<SearchMenuDto>> getMenus(@PathVariable Long storeId) {
-    storeService.validateStore(storeId);
+    storeService.validateStoreExistence(storeId);
 
     List<Menu> menus = menuService.getMenus(storeId);
 
