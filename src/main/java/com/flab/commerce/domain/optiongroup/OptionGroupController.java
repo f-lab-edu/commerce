@@ -5,6 +5,7 @@ import com.flab.commerce.security.owner.OwnerDetails;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,11 +37,11 @@ public class OptionGroupController {
         storeId);
     optionGroupService.registerOptionGroup(optionGroup);
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
   @GetMapping
-  public ResponseEntity<List<OptionGroupReadDto>> getOptionGroup(@PathVariable Long storeId,
+  public ResponseEntity<List<OptionGroupReadDto>> getOptionGroups(@PathVariable Long storeId,
       @AuthenticationPrincipal OwnerDetails ownerDetails) {
 
     storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
@@ -75,10 +76,24 @@ public class OptionGroupController {
 
     optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
 
-    OptionGroup optionGroup = OptionGroupObjectMapper.INSTANCE.toEntity(optionGroupUpdateDto,
-        storeId);
+    OptionGroup optionGroup = OptionGroupObjectMapper.INSTANCE.toEntity(optionGroupUpdateDto, storeId);
     optionGroupService.updateOptionGroup(optionGroup);
 
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{optionGroupId}")
+  public ResponseEntity<OptionGroupAndOptionsResponseDto> getOptionGroup(@PathVariable Long storeId,
+      @PathVariable Long optionGroupId, @AuthenticationPrincipal OwnerDetails ownerDetails) {
+
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+
+    optionGroupService.validateOptionGroupStore(optionGroupId, storeId);
+
+    OptionGroup optionGroup = optionGroupService.getOptionGroupAndOptions(optionGroupId);
+
+    OptionGroupAndOptionsResponseDto dto = OptionGroupObjectMapper.INSTANCE.toDto(optionGroup);
+
+    return ResponseEntity.ok(dto);
   }
 }

@@ -19,4 +19,6 @@ public interface OptionGroupMapper {
   int update(OptionGroup optionGroup);
 
   OptionGroup findById(Long id);
+
+  OptionGroup selectOptionGroupAndOptions(Long id);
 }

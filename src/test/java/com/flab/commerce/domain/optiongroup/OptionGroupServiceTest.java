@@ -8,11 +8,14 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flab.commerce.domain.option.Option;
 import com.flab.commerce.exception.BadInputException;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -181,5 +184,91 @@ class OptionGroupServiceTest {
     // Then
     assertThat(exception).isInstanceOf(BadInputException.class);
     verify(optionGroupMapper).update(any());
+  }
+
+  @Test
+  void 옵션그롭과옵션들을가져오기_optionGroupWithOptions_optionGroup() {
+    // Given
+    Option option1 = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(1L)
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    Option option2 = Option.builder()
+        .name("옵션2")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(1L)
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .id(1L)
+        .name("옵션1")
+        .storeId(1L)
+        .options(Arrays.asList(option1, option2))
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    when(optionGroupMapper.selectOptionGroupAndOptions(optionGroup.getId())).thenReturn(
+        optionGroup);
+    OptionGroup optionGroupAndOptions = optionGroupService.getOptionGroupAndOptions(
+        optionGroup.getId());
+    List<String> names = optionGroupAndOptions.getOptions().stream().map(Option::getName)
+        .collect(Collectors.toList());
+    List<BigInteger> prices = optionGroupAndOptions.getOptions().stream().map(Option::getPrice)
+        .collect(Collectors.toList());
+
+    // Then
+    verify(optionGroupMapper).selectOptionGroupAndOptions(optionGroup.getId());
+    assertThat(optionGroupAndOptions).isNotNull();
+    assertThat(optionGroupAndOptions.getName()).isEqualTo(optionGroup.getName());
+    assertThat(optionGroupAndOptions.getStoreId()).isEqualTo(optionGroup.getStoreId());
+    assertThat(optionGroupAndOptions.getOptions()).hasSize(2);
+    assertThat(names).containsExactlyInAnyOrder(option1.getName(), option2.getName());
+    assertThat(prices).containsExactlyInAnyOrder(option1.getPrice(), option2.getPrice());
+  }
+
+  @Test
+  void 옵션그롭과옵션들을가져오기_optionGroup_옵션이없는경우() {
+    // Given
+    OptionGroup optionGroup = OptionGroup.builder()
+        .id(1L)
+        .name("옵션1")
+        .storeId(1L)
+        .options(Collections.emptyList())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    when(optionGroupMapper.selectOptionGroupAndOptions(optionGroup.getId())).thenReturn(
+        optionGroup);
+    OptionGroup optionGroupAndOptions = optionGroupService.getOptionGroupAndOptions(
+        optionGroup.getId());
+
+    // Then
+    verify(optionGroupMapper).selectOptionGroupAndOptions(optionGroup.getId());
+
+    assertThat(optionGroupAndOptions).isNotNull();
+    assertThat(optionGroupAndOptions.getName()).isEqualTo(optionGroup.getName());
+    assertThat(optionGroupAndOptions.getStoreId()).isEqualTo(optionGroup.getStoreId());
+    assertThat(optionGroupAndOptions.getOptions()).isEmpty();}
+
+  @Test
+  void 옵션그롭과옵션들을가져오기_null_옵션그룹이없는경우() {
+    // When
+    when(optionGroupMapper.selectOptionGroupAndOptions(any())).thenReturn(null);
+    OptionGroup optionGroupAndOptions = optionGroupService.getOptionGroupAndOptions(any());
+
+    // Then
+    verify(optionGroupMapper).selectOptionGroupAndOptions(any());
+
+    assertThat(optionGroupAndOptions).isNull();
   }
 }
