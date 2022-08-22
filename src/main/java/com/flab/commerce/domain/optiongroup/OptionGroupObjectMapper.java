@@ -10,15 +10,19 @@ public interface OptionGroupObjectMapper {
 
   OptionGroupObjectMapper INSTANCE = Mappers.getMapper(OptionGroupObjectMapper.class);
 
+  List<OptionGroupReadDto> toDto(List<OptionGroup> optionGroups);
+
+  OptionGroupAndOptionsResponseDto toDto(OptionGroup optionGroup);
+
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   OptionGroup toEntity(OptionGroupRegisterDto optionGroupRegisterDto, Long storeId);
 
-  List<OptionGroupReadDto> toDto(List<OptionGroup> optionGroups);
-
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "createDateTime", ignore = true)
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   OptionGroup toEntity(OptionGroupUpdateDto optionGroupUpdateDto, Long storeId);
+
+
 }
