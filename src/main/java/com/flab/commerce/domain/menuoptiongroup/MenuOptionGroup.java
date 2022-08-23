@@ -1,5 +1,7 @@
-package com.flab.commerce.domain.menu;
+package com.flab.commerce.domain.menuoptiongroup;
 
+import com.flab.commerce.domain.menu.MenuOption;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +15,14 @@ import lombok.NoArgsConstructor;
 public class MenuOptionGroup {
 
   private Long id;
+
+  private Long menuId;
+
+  private Long optionGroupId;
+
+  private ZonedDateTime createDateTime;
+
+  private ZonedDateTime modifyDateTime;
 
   private List<MenuOption> options;
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flab.commerce.domain.menuoptiongroup.MenuOptionGroupMapper">
+  <insert id="saveAll" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+    INSERT INTO menu_option_group(menu_id, option_group_id, create_date_time, modify_date_time)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.menuId}, #{item.optionGroupId}, #{item.createDateTime}, #{item.modifyDateTime})
+    </foreach>
+  </insert>
+
+  <delete id="deleteByMenuId">
+    DELETE
+    FROM menu_option_group
+    WHERE menu_id = #{menu_id};
+  </delete>
+
+  <select id="menuIdAndOptionGroupIdExists" resultType="boolean">
+    SELECT EXISTS(
+             SELECT 1
+             FROM menu_option_group
+             WHERE menu_id = #{menuId}
+               AND option_group_id = #{optionGroupId}
+             )
+  </select>
+
+  <select id="findById" resultType="com.flab.commerce.domain.menuoptiongroup.MenuOptionGroup">
+    SELECT *
+    FROM menu_option_group
+    WHERE id = #{id};
+  </select>
+
+  <select id="findByMenuId" resultType="com.flab.commerce.domain.menuoptiongroup.MenuOptionGroup">
+    SELECT *
+    FROM menu_option_group
+    WHERE menu_id = #{menuId};
+  </select>
+</mapper>
