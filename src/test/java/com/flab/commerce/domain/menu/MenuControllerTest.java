@@ -37,11 +37,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = MenuController.class)
 @ComponentScan(basePackages = "com.flab.commerce.security")
-@WithMockDetails(rule = Constants.ROLE_OWNER)
+@WithMockDetails(role = Constants.ROLE_OWNER)
 class MenuControllerTest {
 
   @Autowired
-  private MockMvc mockMvc;
+  MockMvc mockMvc;
 
   @Autowired
   ObjectMapper objectMapper;
