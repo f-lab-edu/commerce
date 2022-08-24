@@ -1,11 +1,13 @@
 package com.flab.commerce.domain.menuoptiongroup;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flab.commerce.domain.menu.Menu;
+import com.flab.commerce.domain.optiongroup.OptionGroup;
 import com.flab.commerce.exception.BadInputException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +34,7 @@ class MenuOptionGroupServiceTest {
   final long menuId = 1L;
   final long optionGroupId = 2L;
   final long optionGroupId2 = 3L;
+  final long storeId = 4L;
 
   @Test
   void 삭제후저장_void() {
@@ -129,5 +132,77 @@ class MenuOptionGroupServiceTest {
     // Then
     assertThat(exception).isInstanceOf(BadInputException.class);
     verify(menuOptionGroupMapper).menuIdAndOptionGroupIdExists(menuId, optionGroupId);
+  }
+
+  @Test
+  void 가게아이디로찾기_menuOptionGroups() {
+    // Given
+    MenuOptionGroup menuOptionGroup = MenuOptionGroup.builder()
+        .optionGroup(OptionGroup.builder().id(optionGroupId).name("옵션그룹").build())
+        .menus(Collections.singletonList(
+            Menu.builder().name("메뉴").build())).build();
+    MenuOptionGroup menuOptionGroup2 = MenuOptionGroup.builder()
+        .optionGroup(OptionGroup.builder().id(optionGroupId).name("옵션그룹").build())
+        .menus(Collections.singletonList(
+            Menu.builder().name("메뉴").build())).build();
+
+    // When
+    when(menuOptionGroupMapper.findByStoreId(storeId)).thenReturn(
+        Arrays.asList(menuOptionGroup, menuOptionGroup2));
+
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupService.findByStoreId(storeId);
+
+    // Then
+    verify(menuOptionGroupMapper).findByStoreId(storeId);
+    assertThat(menuOptionGroups).isNotNull().hasSize(2);
+  }
+
+  @Test
+  void 가게아이디로찾기_menuOptionGroup_optionGroup이1건인경우() {
+    // Given
+    MenuOptionGroup menuOptionGroup = MenuOptionGroup.builder()
+        .optionGroup(OptionGroup.builder().id(optionGroupId).name("옵션그룹").build())
+        .menus(Collections.singletonList(
+            Menu.builder().name("메뉴").build())).build();
+
+    // When
+    when(menuOptionGroupMapper.findByStoreId(storeId)).thenReturn(
+        Collections.singletonList(menuOptionGroup));
+
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupService.findByStoreId(storeId);
+
+    // Then
+    verify(menuOptionGroupMapper).findByStoreId(storeId);
+    assertThat(menuOptionGroups).isNotNull().hasSize(1);
+    assertThat(menuOptionGroups.get(0).getMenus()).isNotNull().hasSize(1);
+  }
+
+  @Test
+  void 가게아이디로찾기_menuOptionGroup_메뉴빈값인경우() {
+    // Given
+    MenuOptionGroup menuOptionGroup = MenuOptionGroup.builder()
+        .optionGroup(OptionGroup.builder().id(optionGroupId).name("옵션그룹").build())
+        .menus(Collections.emptyList()).build();
+
+    // When
+    when(menuOptionGroupMapper.findByStoreId(storeId)).thenReturn(
+        Collections.singletonList(menuOptionGroup));
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupService.findByStoreId(storeId);
+
+    // Then
+    verify(menuOptionGroupMapper).findByStoreId(storeId);
+    assertThat(menuOptionGroups).isNotNull().hasSize(1);
+    assertThat(menuOptionGroups.get(0).getMenus()).isNotNull().isEmpty();
+  }
+
+  @Test
+  void 가게아이디로찾기_빈값_optionGroup이없는경우() {
+    // When
+    when(menuOptionGroupMapper.findByStoreId(storeId)).thenReturn(Collections.emptyList());
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupService.findByStoreId(storeId);
+
+    // Then
+    verify(menuOptionGroupMapper).findByStoreId(storeId);
+    assertThat(menuOptionGroups).isNotNull().isEmpty();
   }
 }

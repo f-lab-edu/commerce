@@ -36,4 +36,28 @@
     FROM menu_option_group
     WHERE menu_id = #{menuId};
   </select>
+
+  <resultMap id="menuAndOptionGroup"
+    type="com.flab.commerce.domain.menuoptiongroup.MenuOptionGroup">
+    <id column="optiong_group_id"/>
+    <association property="optionGroup"
+      javaType="com.flab.commerce.domain.optiongroup.OptionGroup">
+      <result property="id" column="option_group_id"/>
+      <result property="name" column="option_group_name"/>
+    </association>
+    <collection property="menus" ofType="com.flab.commerce.domain.menu.Menu">
+      <result property="name" column="menu_name"/>
+    </collection>
+  </resultMap>
+
+  <select id="findByStoreId" resultMap="menuAndOptionGroup">
+    SELECT og.id   AS optiong_group_id,
+           og.name AS option_group_name,
+           m.id    AS menu_id,
+           m.name  AS menu_name
+    FROM option_group og
+           LEFT JOIN menu_option_group mog ON og.id = mog.option_group_id
+           LEFT JOIN menu m ON m.id = mog.menu_id
+    WHERE og.store_id = #{storeId};
+  </select>
 </mapper>

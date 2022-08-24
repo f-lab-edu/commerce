@@ -15,4 +15,6 @@ public interface MenuOptionGroupMapper {
   MenuOptionGroup findById(Long id);
 
   List<MenuOptionGroup> findByMenuId(Long menuId);
+
+  List<MenuOptionGroup> findByStoreId(Long storeId);
 }
