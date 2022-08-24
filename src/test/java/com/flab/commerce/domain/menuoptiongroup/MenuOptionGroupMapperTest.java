@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.MyBatisSystemException;
@@ -280,7 +281,7 @@ class MenuOptionGroupMapperTest {
   }
 
   @Test
-  void 메뉴아이디와옵션그룹아이디가존재합니다_true(){
+  void 메뉴아이디와옵션그룹아이디가존재합니다_true() {
     // Given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
@@ -331,14 +332,15 @@ class MenuOptionGroupMapperTest {
     menuOptionGroupMapper.saveAll(Collections.singletonList(menuOptionGroup));
 
     // When
-    boolean exist = menuOptionGroupMapper.menuIdAndOptionGroupIdExists(menu.getId(), optionGroup.getId());
+    boolean exist = menuOptionGroupMapper.menuIdAndOptionGroupIdExists(menu.getId(),
+        optionGroup.getId());
 
     // Then
     assertThat(exist).isTrue();
   }
 
   @Test
-  void 메뉴아이디와옵션그룹아이디가존재합니다_false(){
+  void 메뉴아이디와옵션그룹아이디가존재합니다_false() {
     // When
     boolean exist = menuOptionGroupMapper.menuIdAndOptionGroupIdExists(1L, 2L);
 
@@ -347,7 +349,7 @@ class MenuOptionGroupMapperTest {
   }
 
   @Test
-  void 메뉴아이디로삭제(){
+  void 메뉴아이디로삭제() {
     // Given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
@@ -458,7 +460,7 @@ class MenuOptionGroupMapperTest {
   }
 
   @Test
-  void 메뉴아이디로삭제_0_메뉴옵션그룹이없는경우(){
+  void 메뉴아이디로삭제_0_메뉴옵션그룹이없는경우() {
     // Given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
@@ -498,6 +500,205 @@ class MenuOptionGroupMapperTest {
 
     // Then
     assertThat(countDeleted).isZero();
+    assertThat(menuOptionGroups).isEmpty();
+  }
+
+  @Test
+  void 상점아이디로찾기_menuOptionGroups() {
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    Menu menu = Menu.builder()
+        .name("돈까스1")
+        .price(BigDecimal.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu);
+
+    Menu menu2 = Menu.builder()
+        .name("돈까스2")
+        .price(BigDecimal.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu2);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    OptionGroup optionGroup2 = OptionGroup.builder()
+        .name("옵션2")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup2);
+
+    MenuOptionGroup menuOptionGroup = MenuOptionGroup.builder()
+        .menuId(menu.getId())
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    MenuOptionGroup menuOptionGroup2 = MenuOptionGroup.builder()
+        .menuId(menu2.getId())
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    MenuOptionGroup menuOptionGroup3 = MenuOptionGroup.builder()
+        .menuId(menu.getId())
+        .optionGroupId(optionGroup2.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuOptionGroupMapper.saveAll(
+        Arrays.asList(menuOptionGroup, menuOptionGroup2, menuOptionGroup3));
+
+    // When
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupMapper.findByStoreId(store.getId());
+    MenuOptionGroup selectMenuOptionGroup = menuOptionGroups.get(0);
+    List<String> menuNames = selectMenuOptionGroup.getMenus().stream().map(Menu::getName)
+        .collect(Collectors.toList());
+
+    MenuOptionGroup selectMenuOptionGroup2 = menuOptionGroups.get(1);
+    List<String> menuNames2 = selectMenuOptionGroup2.getMenus().stream().map(Menu::getName)
+        .collect(Collectors.toList());
+
+    // then
+    assertThat(menuOptionGroups).isNotNull().hasSize(2);
+    assertThat(selectMenuOptionGroup.getMenus()).hasSize(2);
+    assertThat(selectMenuOptionGroup.getOptionGroup().getName()).isEqualTo(optionGroup.getName());
+    assertThat(menuNames).contains(menu.getName(), menu2.getName());
+
+    assertThat(selectMenuOptionGroup2.getMenus()).hasSize(1);
+    assertThat(selectMenuOptionGroup2.getOptionGroup().getName()).isEqualTo(optionGroup2.getName());
+    assertThat(menuNames2).contains(menu.getName());
+  }
+
+  @Test
+  void 상점아이디로찾기_menuOptionGroups_메뉴가없는경우() {
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    Menu menu = Menu.builder()
+        .name("돈까스1")
+        .price(BigDecimal.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    // When
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupMapper.findByStoreId(store.getId());
+    MenuOptionGroup selectMenuOptionGroup = menuOptionGroups.get(0);
+
+    // then
+    assertThat(menuOptionGroups).isNotNull().hasSize(1);
+    assertThat(selectMenuOptionGroup.getMenus()).isEmpty();
+    assertThat(selectMenuOptionGroup.getOptionGroup().getName()).isEqualTo(optionGroup.getName());
+  }
+
+  @Test
+  void 상점아이디로찾기_빈값_옵션그룹이없는경우() {
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    Menu menu = Menu.builder()
+        .name("돈까스1")
+        .price(BigDecimal.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu);
+
+    // When
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupMapper.findByStoreId(store.getId());
+
+    // then
     assertThat(menuOptionGroups).isEmpty();
   }
 }

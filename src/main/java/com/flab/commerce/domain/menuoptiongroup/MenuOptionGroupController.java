@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,15 +43,46 @@ public class MenuOptionGroupController {
       menuOptionGroupService.validateDuplicate(menuId, optionGroupId);
     }
 
+    List<MenuOptionGroup> menuOptionGroups = toEntity(
+        menuOptionGroupRequestDto, menuId);
+
+    menuOptionGroupService.saveAfterDeletion(menuId, menuOptionGroups);
+
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @GetMapping
+  public ResponseEntity<List<MenuOptionGroupResponseDto>> getMenuOptionGroups(
+      @PathVariable Long storeId,
+      @AuthenticationPrincipal OwnerDetails ownerDetails) {
+    storeService.validateOwnerStore(ownerDetails.getOwner().getId(), storeId);
+    List<MenuOptionGroup> menuOptionGroups = menuOptionGroupService.findByStoreId(storeId);
+
+    List<MenuOptionGroupResponseDto> menuOptionGroupResponseDtos = toDto(
+        menuOptionGroups);
+
+    return ResponseEntity.ok(menuOptionGroupResponseDtos);
+  }
+
+  private List<MenuOptionGroup> toEntity(
+      MenuOptionGroupRequestDto menuOptionGroupRequestDto, Long menuId) {
     List<MenuOptionGroup> menuOptionGroups = new LinkedList<>();
     for (Long optionGroupId : menuOptionGroupRequestDto.getOptionGroupIds()) {
       MenuOptionGroup menuOptionGroup = MenuOptionGroupObjectMapper.INSTANCE.toEntity(menuId,
           optionGroupId);
       menuOptionGroups.add(menuOptionGroup);
     }
+    return menuOptionGroups;
+  }
 
-    menuOptionGroupService.saveAfterDeletion(menuId, menuOptionGroups);
-
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+  private List<MenuOptionGroupResponseDto> toDto(
+      List<MenuOptionGroup> menuOptionGroups) {
+    List<MenuOptionGroupResponseDto> menuOptionGroupResponseDtos = new LinkedList<>();
+    for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
+      MenuOptionGroupResponseDto menuOptionGroupResponseDto = MenuOptionGroupObjectMapper.INSTANCE
+          .toDto(menuOptionGroup);
+      menuOptionGroupResponseDtos.add(menuOptionGroupResponseDto);
+    }
+    return menuOptionGroupResponseDtos;
   }
 }

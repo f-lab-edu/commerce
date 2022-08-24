@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -314,5 +315,66 @@ class MenuOptionGroupControllerTest {
     verify(optionGroupService, never()).validateOptionGroupStore(optionGroupId2, storeId);
     verify(menuOptionGroupService, never()).validateDuplicate(menuId, optionGroupId2);
     verify(menuOptionGroupService, never()).saveAfterDeletion(eq(menuId), any());
+  }
+
+  @Test
+  void 메뉴옵션그룹들가져오기_200() throws Exception {
+    // Then
+    mockMvc.perform(get("/stores/{storeId}/menu-option-groups", storeId)
+            .contentType(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
+    verify(storeService).validateOwnerStore(any(), eq(storeId));
+    verify(menuOptionGroupService).findByStoreId(storeId);
+  }
+
+  @Test
+  @WithMockUser
+  void 메뉴옵션그룹들가져오기_403_사용자권한() throws Exception {
+    // Then
+    mockMvc.perform(get("/stores/{storeId}/menu-option-groups", storeId)
+            .contentType(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+    verify(storeService, never()).validateOwnerStore(any(), eq(storeId));
+    verify(menuOptionGroupService, never()).findByStoreId(storeId);
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 메뉴옵션그룹들가져오기_403_익명사용자권한() throws Exception {
+    // Then
+    mockMvc.perform(get("/stores/{storeId}/menu-option-groups", storeId)
+            .contentType(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+    verify(storeService, never()).validateOwnerStore(any(), eq(storeId));
+    verify(menuOptionGroupService, never()).findByStoreId(storeId);
+  }
+
+  @Test
+  void 메뉴옵션그룹들가져오기_400_가게가존재하지않는경우() throws Exception {
+    // When
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), eq(storeId));
+    // Then
+    mockMvc.perform(get("/stores/{storeId}/menu-option-groups", storeId)
+            .contentType(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    verify(storeService).validateOwnerStore(any(), eq(storeId));
+    verify(menuOptionGroupService, never()).findByStoreId(storeId);
+  }
+
+  @Test
+  void 메뉴옵션그룹들가져오기_401_다른사장님의가게인경우() throws Exception {
+    // When
+  doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), eq(storeId));
+    // Then
+    mockMvc.perform(get("/stores/{storeId}/menu-option-groups", storeId)
+            .contentType(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+    verify(storeService).validateOwnerStore(any(), eq(storeId));
+    verify(menuOptionGroupService, never()).findByStoreId(storeId);
   }
 }

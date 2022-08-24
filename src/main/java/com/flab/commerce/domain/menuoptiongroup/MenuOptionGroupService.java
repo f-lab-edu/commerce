@@ -21,4 +21,8 @@ public class MenuOptionGroupService {
     menuOptionGroupMapper.deleteByMenuId(menuId);
     menuOptionGroupMapper.saveAll(menuOptionGroups);
   }
+
+  public List<MenuOptionGroup> findByStoreId(Long storeId) {
+    return menuOptionGroupMapper.findByStoreId(storeId);
+  }
 }
