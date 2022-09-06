@@ -1,7 +1,6 @@
 package com.flab.commerce.domain.optiongroup;
 
-import com.flab.commerce.domain.option.Option;
-import java.time.ZonedDateTime;
+import com.flab.commerce.domain.option.OptionResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -9,21 +8,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionGroup {
+@Builder
+@Getter
+public class OptionGroupDetailDto {
 
   private Long id;
 
   private String name;
 
-  private Long storeId;
-
-  private List<Option> options = new ArrayList<>();
-
-  private ZonedDateTime createDateTime;
-
-  private ZonedDateTime modifyDateTime;
+  private List<OptionResponseDto> options = new ArrayList<>();
 }
