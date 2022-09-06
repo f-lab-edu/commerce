@@ -38,4 +38,10 @@
     FROM options
     WHERE id = #{id};
   </delete>
+
+  <select id="findByIdIn" resultType="com.flab.commerce.domain.option.Option">
+    SELECT *
+    FROM options
+    WHERE id IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>);
+  </select>
 </mapper>

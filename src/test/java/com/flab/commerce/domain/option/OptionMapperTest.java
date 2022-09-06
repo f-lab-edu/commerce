@@ -14,11 +14,19 @@ import com.flab.commerce.domain.store.StoreStatus;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = NONE)
@@ -563,5 +571,77 @@ class OptionMapperTest {
 
     // Then
     assertThat(exists).isFalse();
+  }
+
+  @Test
+  void 아이디로찾기In_2() {
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option);
+
+    Option option2 = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option2);
+
+    // When
+    List<Option> options = optionMapper.findByIdIn(new HashSet<>(Arrays.asList(option.getId(), option2.getId())));
+    List<Long> ids = options.stream().map(Option::getId).collect(Collectors.toList());
+
+    // Then
+    assertThat(options).hasSize(2);
+    assertThat(ids).contains(option.getId(), option2.getId());
+  }
+
+  @Test
+  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
+    // Given
+    Set<Long> emptyIds = Collections.emptySet();
+
+    // When
+    Throwable throwable = Assertions.catchThrowable(
+        () -> optionMapper.findByIdIn(emptyIds));
+
+    // Then
+    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }
