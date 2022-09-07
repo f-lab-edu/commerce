@@ -7,4 +7,5 @@ public interface DeliveryMapper {
 
   int save(Delivery newDelivery);
 
+  Delivery findById(Long id);
 }

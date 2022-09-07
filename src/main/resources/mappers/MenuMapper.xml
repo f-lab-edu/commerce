@@ -40,4 +40,10 @@
     modify_date_time = #{modifyDateTime}
     WHERE id = #{id};
   </update>
+
+  <select id="findByIdIn" resultType="com.flab.commerce.domain.menu.Menu">
+    SELECT *
+    FROM menu
+    WHERE id IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>);
+  </select>
 </mapper>

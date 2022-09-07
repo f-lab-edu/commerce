@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.optiongroup;
 
 import java.util.List;
+import java.util.Set;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -21,4 +22,6 @@ public interface OptionGroupMapper {
   OptionGroup findById(Long id);
 
   OptionGroup selectOptionGroupAndOptions(Long id);
+
+  List<OptionGroup> findByIdIn(Set<Long> ids);
 }

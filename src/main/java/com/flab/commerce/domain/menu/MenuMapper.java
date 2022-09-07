@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.menu;
 
 import java.util.List;
+import java.util.Set;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -19,4 +20,6 @@ public interface MenuMapper {
   boolean idAndStoreIdExists(Long id, Long storeId);
 
   int patch(Menu menu);
+
+  List<Menu> findByIdIn(Set<Long> ids);
 }
