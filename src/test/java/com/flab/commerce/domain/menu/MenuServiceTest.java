@@ -163,4 +163,33 @@ class MenuServiceTest {
     verify(menuMapper).idExists(any());
     verify(menuMapper).idAndStoreIdExists(any(), any());
   }
+
+  @Test
+  void 메뉴패치_void() {
+    // Given
+    when(menuMapper.patch(any())).thenReturn(1);
+    // When
+    menuService.patchMenu(any());
+    // Then
+    verify(menuMapper).patch(any());
+  }
+
+  @Test
+  void 메뉴패치_DataIntegrityViolationException_삭제처리못한경우() {
+    // Given
+    Menu patchMenu = Menu.builder()
+        .id(-1L)
+        .name("치즈 돈까스")
+        .price(BigDecimal.valueOf(10001L))
+        .image("image2")
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    // When
+    doThrow(DataIntegrityViolationException.class).when(menuMapper).patch(any());
+    Throwable throwable = catchThrowableOfType(
+        () -> menuService.patchMenu(patchMenu), DataIntegrityViolationException.class);
+
+    // Then
+    assertThat(throwable).isInstanceOf(DataIntegrityViolationException.class);
+  }
 }

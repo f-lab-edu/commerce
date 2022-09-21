@@ -32,4 +32,8 @@ public class MenuService {
   public void deleteMenu(Long menuId, Long storeId) {
     menuMapper.deleteByIdAndStoreId(menuId, storeId);
   }
+
+  public void patchMenu(Menu menu) {
+    menuMapper.patch(menu);
+  }
 }

@@ -17,4 +17,6 @@ public interface MenuMapper {
   boolean idExists(Long id);
 
   boolean idAndStoreIdExists(Long id, Long storeId);
+
+  int patch(Menu menu);
 }
