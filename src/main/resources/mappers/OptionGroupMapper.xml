@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flab.commerce.domain.optiongroup.OptionGroupMapper">
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id"
+    parameterType="com.flab.commerce.domain.optiongroup.OptionGroup">
+    INSERT INTO option_group (name, store_id, create_date_time, modify_date_time)
+    VALUES (#{name}, #{storeId}, #{createDateTime}, #{modifyDateTime});
+  </insert>
+
+  <select id="findByStoreId" resultType="com.flab.commerce.domain.optiongroup.OptionGroup"
+    parameterType="java.lang.Long">
+    SELECT *
+    FROM option_group
+    WHERE store_id = #{storeId};
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Long">
+    DELETE
+    FROM option_group
+    WHERE id = #{id};
+  </delete>
+
+  <select id="idExists" parameterType="java.lang.Long" resultType="java.lang.Boolean">
+    SELECT EXISTS(
+             SELECT id
+             FROM option_group
+             WHERE id = #{id}
+             );
+  </select>
+
+  <select id="idAndStoreIdExists" resultType="java.lang.Boolean">
+    SELECT EXISTS(
+             SELECT id
+             FROM option_group
+             WHERE id = #{id}
+               AND store_id = #{storeId}
+             );
+  </select>
+
+  <update id="update" parameterType="com.flab.commerce.domain.optiongroup.OptionGroup">
+    UPDATE option_group
+    SET name             = #{name},
+        modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
+
+  <select id="findById" resultType="com.flab.commerce.domain.optiongroup.OptionGroup"
+    parameterType="java.lang.Long">
+    SELECT *
+    FROM option_group
+    WHERE id = #{id};
+  </select>
+</mapper>

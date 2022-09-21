@@ -11,4 +11,12 @@ public interface MenuMapper {
   Menu findById(Long id);
 
   List<Menu> findByStoreId(Long storeId);
+
+  int deleteByIdAndStoreId(Long id, Long storeId);
+
+  boolean idExists(Long id);
+
+  boolean idAndStoreIdExists(Long id, Long storeId);
+
+  int patch(Menu menu);
 }
