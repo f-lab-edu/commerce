@@ -382,7 +382,7 @@ class OptionGroupControllerTest {
   @Test
   @WithMockUser
   void 옵션그룹수정_403_사용자권한() throws Exception {
-    // Givenㄴ
+    // Given
     OptionGroupUpdateDto updateDto = OptionGroupUpdateDto.builder().name("수정한이름").build();
     String body = objectMapper.writeValueAsString(updateDto);
 

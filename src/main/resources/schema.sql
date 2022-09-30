@@ -96,4 +96,4 @@ CREATE TABLE menu_option_group
     FOREIGN KEY (menu_id) REFERENCES menu (id),
     FOREIGN KEY (option_group_id) REFERENCES option_group (id),
     UNIQUE (menu_id, option_group_id)
-)
+);
