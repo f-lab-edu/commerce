@@ -15,9 +15,7 @@ public class Orders {
 
   private Long id;
 
-  private String address;
-
-  private BigDecimal totalPrice;
+  private BigInteger totalPrice;
 
   private OrderStatus status;
 

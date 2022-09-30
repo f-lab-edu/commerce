@@ -1,6 +1,7 @@
 package com.flab.commerce.config;
 
 import static com.flab.commerce.util.Constants.ROLE_OWNER;
+import static com.flab.commerce.util.Constants.ROLE_USER;
 
 import com.flab.commerce.security.GeneralAuthenticationProcessingFilter;
 import com.flab.commerce.security.GeneralLogoutSuccessHandler;
@@ -28,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/owners", "/owners/login").permitAll()
         .antMatchers(HttpMethod.GET, "/owners/logout").permitAll()
         .antMatchers("/stores/**").hasAuthority(ROLE_OWNER)
+        .antMatchers("/orders/**").hasAuthority(ROLE_USER)
         .anyRequest().authenticated()
         .and()
         .addFilterBefore(generalAuthenticationProcessingFilter,

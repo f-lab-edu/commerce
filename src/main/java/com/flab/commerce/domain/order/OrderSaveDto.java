@@ -1,7 +1,7 @@
 package com.flab.commerce.domain.order;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
+import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -16,15 +16,13 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderSaveDto {
-
+  @Valid
   @NotNull
-  private Long menuId;
+  private List<OrderMenuDto> menus;
 
-  @NotNull
-  private Long userId;
-
-  @Min(value = 0)
-  private int amount;
+  @NotBlank
+  @Length(min = 5, max = 5)
+  private String zipCode;
 
   @NotBlank
   private String address;
@@ -33,10 +31,6 @@ public class OrderSaveDto {
   private String addressDetail;
 
   @NotBlank
-  @Length(min = 5, max = 5)
-  private String zipCode;
-
-  @NotBlank
-  @Length(min = 11, max = 12)
+  @Length(min = 9)
   private String phone;
 }
