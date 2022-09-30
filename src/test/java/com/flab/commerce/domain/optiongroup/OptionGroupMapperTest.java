@@ -12,9 +12,13 @@ import com.flab.commerce.domain.store.Store;
 import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,7 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -47,8 +52,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -58,8 +63,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -86,8 +91,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -97,8 +102,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -126,8 +131,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -137,8 +142,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store1);
@@ -149,8 +154,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store2);
@@ -196,8 +201,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -207,8 +212,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -228,8 +233,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -239,8 +244,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -279,8 +284,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -290,8 +295,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -331,8 +336,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -342,8 +347,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -371,8 +376,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -382,8 +387,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -412,8 +417,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -423,8 +428,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -452,8 +457,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -463,8 +468,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store1);
@@ -475,8 +480,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store2);
@@ -504,8 +509,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -515,8 +520,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -553,8 +558,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -564,8 +569,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -602,8 +607,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -613,8 +618,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -669,8 +674,8 @@ class OptionGroupMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -680,8 +685,8 @@ class OptionGroupMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -711,5 +716,69 @@ class OptionGroupMapperTest {
 
     // Then
     assertThat(selected).isNull();
+  }
+
+  @Test
+  void 아이디로찾기In_2() {
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    OptionGroup optionGroup2 = OptionGroup.builder()
+        .name("옵션그룹2")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup2);
+
+    // When
+    List<OptionGroup> optionGroups = optionGroupMapper.findByIdIn(
+        new HashSet<>(Arrays.asList(optionGroup.getId(), optionGroup2.getId())));
+    List<Long> ids = optionGroups.stream().map(OptionGroup::getId).collect(Collectors.toList());
+
+    // Then
+    assertThat(optionGroups).hasSize(2);
+    assertThat(ids).contains(optionGroup.getId(), optionGroup2.getId());
+  }
+
+  @Test
+  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
+    // Given
+    Set<Long> emptyIds = Collections.emptySet();
+
+    // When
+    Throwable throwable = Assertions.catchThrowable(
+        () -> optionGroupMapper.findByIdIn(emptyIds));
+
+    // Then
+    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }

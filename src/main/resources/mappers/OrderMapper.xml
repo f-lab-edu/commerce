@@ -3,7 +3,15 @@
 <mapper namespace="com.flab.commerce.domain.order.OrderMapper">
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO orders(address, total_price, status, menu_options, create_date_time, update_date_time)
-    VALUES (#{address}, #{totalPrice}, #{status}, #{menuOptions}, #{createDateTime}, #{updateDateTime})
+    INSERT INTO orders(total_price, status, menu_options, user_id, create_date_time,
+                       modify_date_time)
+    VALUES (#{totalPrice}, #{status}, #{menuOptions}, #{userId}, #{createDateTime},
+            #{modifyDateTime});
   </insert>
+
+  <select id="findById" resultType="com.flab.commerce.domain.order.Orders">
+    SELECT *
+    FROM orders
+    WHERE id = #{id};
+  </select>
 </mapper>

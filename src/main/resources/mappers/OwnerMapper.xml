@@ -4,12 +4,12 @@
 <mapper namespace="com.flab.commerce.domain.owner.OwnerMapper">
 
   <insert id="register" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO owner(email, password, name, phone, create_date_time, update_date_time)
-    VALUES (#{email}, #{password}, #{name}, #{phone}, #{createDateTime}, #{updateDateTime});
+    INSERT INTO owner(email, password, name, phone, create_date_time, modify_date_time)
+    VALUES (#{email}, #{password}, #{name}, #{phone}, #{createDateTime}, #{modifyDateTime});
   </insert>
 
   <select id="findByEmail" resultType="com.flab.commerce.domain.owner.Owner">
-    SELECT id, email, password, name, phone, create_date_time, update_date_time
+    SELECT id, email, password, name, phone, create_date_time, modify_date_time
     FROM owner
     WHERE email = #{email};
   </select>

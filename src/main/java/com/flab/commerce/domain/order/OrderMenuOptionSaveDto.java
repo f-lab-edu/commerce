@@ -1,4 +1,4 @@
-package com.flab.commerce.domain.price;
+package com.flab.commerce.domain.order;
 
 import java.math.BigInteger;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Price {
+public class OrderMenuOptionSaveDto {
 
-  private Long id;
+  private String optionGroupName;
+
+  private String optionName;
 
   private BigInteger price;
-
-  private Long orderId;
 }

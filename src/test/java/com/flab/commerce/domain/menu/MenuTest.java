@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.flab.commerce.exception.BadInputException;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 class MenuTest {
@@ -13,9 +13,9 @@ class MenuTest {
   void 가격을_계산한다() {
     Menu menu = createMenu(1_000L);
 
-    BigDecimal totalPrice = menu.calculateTotalPrice(2);
+    BigInteger totalPrice = menu.calculateTotalPrice(2);
 
-    assertThat(totalPrice).isEqualTo(BigDecimal.valueOf(2_000L));
+    assertThat(totalPrice).isEqualTo(BigInteger.valueOf(2_000L));
   }
 
   @Test
@@ -28,7 +28,7 @@ class MenuTest {
 
   private Menu createMenu(long price) {
     return Menu.builder()
-        .price(BigDecimal.valueOf(price))
+        .price(BigInteger.valueOf(price))
         .build();
   }
 }

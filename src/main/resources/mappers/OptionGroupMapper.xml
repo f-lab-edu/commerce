@@ -77,4 +77,10 @@
                      ON og.id = o.option_group_id
     WHERE og.id = #{id};
   </select>
+
+  <select id="findByIdIn" resultType="com.flab.commerce.domain.optiongroup.OptionGroup">
+    SELECT *
+    FROM option_group
+    WHERE id IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>);
+  </select>
 </mapper>

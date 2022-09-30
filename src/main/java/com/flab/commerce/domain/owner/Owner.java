@@ -1,7 +1,7 @@
 package com.flab.commerce.domain.owner;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Owner implements Serializable {
 
   private String phone;
 
-  private LocalDateTime createDateTime;
+  private ZonedDateTime createDateTime;
 
-  private LocalDateTime updateDateTime;
+  private ZonedDateTime modifyDateTime;
 }

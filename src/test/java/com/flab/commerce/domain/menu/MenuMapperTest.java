@@ -9,16 +9,22 @@ import com.flab.commerce.domain.owner.OwnerMapper;
 import com.flab.commerce.domain.store.Store;
 import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = NONE)
@@ -41,8 +47,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -52,15 +58,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -82,7 +88,7 @@ class MenuMapperTest {
     // Given
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(-1L)
         .createDateTime(ZonedDateTime.now())
@@ -105,8 +111,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -116,15 +122,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu1 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -133,7 +139,7 @@ class MenuMapperTest {
 
     Menu menu2 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -160,8 +166,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -171,8 +177,8 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
@@ -201,8 +207,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -212,15 +218,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu1 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -229,7 +235,7 @@ class MenuMapperTest {
 
     Menu menu2 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -258,8 +264,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -269,8 +275,8 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store1);
@@ -281,15 +287,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store2);
 
     Menu menu1 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store1.getId())
         .createDateTime(ZonedDateTime.now())
@@ -298,7 +304,7 @@ class MenuMapperTest {
 
     Menu menu2 = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store2.getId())
         .createDateTime(ZonedDateTime.now())
@@ -330,8 +336,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
     Store store = Store.builder()
@@ -340,14 +346,14 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .createDateTime(ZonedDateTime.now())
@@ -374,8 +380,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -385,15 +391,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -403,7 +409,7 @@ class MenuMapperTest {
     Menu patchMenu = Menu.builder()
         .id(menu.getId())
         .name("치즈 돈까스")
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .image("image2")
         .modifyDateTime(ZonedDateTime.now())
         .build();
@@ -433,8 +439,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -444,15 +450,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -490,8 +496,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -501,15 +507,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -518,7 +524,7 @@ class MenuMapperTest {
 
     Menu patchMenu = Menu.builder()
         .id(menu.getId())
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .modifyDateTime(ZonedDateTime.now())
         .build();
 
@@ -546,8 +552,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -557,15 +563,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -602,8 +608,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -613,15 +619,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -631,7 +637,7 @@ class MenuMapperTest {
     Menu patchMenu = Menu.builder()
         .id(menu.getId())
         .name("치즈 동까스")
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .modifyDateTime(ZonedDateTime.now())
         .build();
 
@@ -659,8 +665,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -670,15 +676,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -716,8 +722,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -727,15 +733,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -744,7 +750,7 @@ class MenuMapperTest {
 
     Menu patchMenu = Menu.builder()
         .id(menu.getId())
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .image("image2")
         .modifyDateTime(ZonedDateTime.now())
         .build();
@@ -773,8 +779,8 @@ class MenuMapperTest {
         .password("1234")
         .name("박병길")
         .phone("0101231234")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
     ownerMapper.register(owner);
 
@@ -784,15 +790,15 @@ class MenuMapperTest {
         .phone("021231234")
         .description("중국집")
         .status(StoreStatus.OPEN)
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .ownerId(owner.getId())
         .build();
     storeMapper.register(store);
 
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
         .modifyDateTime(ZonedDateTime.now())
@@ -825,7 +831,7 @@ class MenuMapperTest {
     Menu patchMenu = Menu.builder()
         .id(-1L)
         .name("치즈 돈까스")
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .image("image2")
         .modifyDateTime(ZonedDateTime.now())
         .build();
@@ -835,5 +841,73 @@ class MenuMapperTest {
 
     // Then
     assertThat(countPatched).isZero();
+  }
+
+  @Test
+  void 아이디로찾기In_2() {
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    Menu menu = Menu.builder()
+        .name("돈까스")
+        .price(BigInteger.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu);
+
+    Menu menu2 = Menu.builder()
+        .name("돈까스")
+        .price(BigInteger.valueOf(10000L))
+        .image("image")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    menuMapper.register(menu2);
+
+    // When
+    List<Menu> menus = menuMapper.findByIdIn(
+        new HashSet<>(Arrays.asList(menu.getId(), menu2.getId())));
+    Set<Long> ids = menus.stream().map(Menu::getId).collect(Collectors.toSet());
+
+    // Then
+    assertThat(menus).hasSize(2);
+    assertThat(ids).contains(menu.getId(), menu2.getId());
+  }
+
+  @Test
+  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
+    // Given
+    Set<Long> emptyIds = Collections.emptySet();
+
+    // When
+    Throwable throwable = Assertions.catchThrowable(
+        () -> menuMapper.findByIdIn(emptyIds));
+
+    // Then
+    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }

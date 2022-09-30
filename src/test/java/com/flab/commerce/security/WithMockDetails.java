@@ -7,5 +7,5 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockDetailsSecurityContextFactory.class)
 public @interface WithMockDetails {
-  String rule();
+  String role();
 }

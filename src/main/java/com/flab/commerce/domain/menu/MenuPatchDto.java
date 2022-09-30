@@ -1,6 +1,6 @@
 package com.flab.commerce.domain.menu;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class MenuPatchDto {
 
   @Min(0)
   @Max(10_000_000)
-  private BigDecimal price;
+  private BigInteger price;
 
   @Length(min = 40, max = 41)
   private String image;

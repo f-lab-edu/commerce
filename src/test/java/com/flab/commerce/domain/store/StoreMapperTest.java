@@ -5,7 +5,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 import com.flab.commerce.domain.owner.Owner;
 import com.flab.commerce.domain.owner.OwnerMapper;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +69,8 @@ class StoreMapperTest {
             .password("1234")
             .name("박병길")
             .phone("0101231234")
-            .createDateTime(LocalDateTime.now())
-            .updateDateTime(LocalDateTime.now())
+            .createDateTime(ZonedDateTime.now())
+            .modifyDateTime(ZonedDateTime.now())
             .build();
         ownerMapper.register(owner);
 
@@ -92,8 +92,8 @@ class StoreMapperTest {
             .password("1234")
             .name("박병길")
             .phone("0101231234")
-            .createDateTime(LocalDateTime.now())
-            .updateDateTime(LocalDateTime.now())
+            .createDateTime(ZonedDateTime.now())
+            .modifyDateTime(ZonedDateTime.now())
             .build();
         ownerMapper.register(ownerOfStore);
 
@@ -105,8 +105,8 @@ class StoreMapperTest {
             .password("1234")
             .name("박병길")
             .phone("0101231234")
-            .createDateTime(LocalDateTime.now())
-            .updateDateTime(LocalDateTime.now())
+            .createDateTime(ZonedDateTime.now())
+            .modifyDateTime(ZonedDateTime.now())
             .build();
         ownerMapper.register(owner);
 
@@ -124,8 +124,8 @@ class StoreMapperTest {
                 .phone("021231234")
                 .description("중국집")
                 .status(StoreStatus.OPEN)
-                .createDateTime(LocalDateTime.now())
-                .updateDateTime(LocalDateTime.now())
+                .createDateTime(ZonedDateTime.now())
+                .modifyDateTime(ZonedDateTime.now())
                 .ownerId(ownerId)
                 .build();
     }

@@ -1,7 +1,8 @@
 package com.flab.commerce.domain.menu;
 
+import com.flab.commerce.domain.menuoptiongroup.MenuOptionGroup;
 import com.flab.commerce.exception.BadInputException;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Menu {
 
   private String name;
 
-  private BigDecimal price;
+  private BigInteger price;
 
   private String image;
 
@@ -33,12 +34,12 @@ public class Menu {
 
   private List<MenuOptionGroup> groups;
 
-  public BigDecimal calculateTotalPrice(int amount) {
+  public BigInteger calculateTotalPrice(int amount) {
     if (amount <= 0) {
       throw new BadInputException("주문 상품의 개수는 0이나 음수가 될 수 없습니다");
     }
 
-    return price.multiply(BigDecimal.valueOf(amount));
+    return price.multiply(BigInteger.valueOf(amount));
   }
 
   public List<MenuOption> getMenuOptions() {

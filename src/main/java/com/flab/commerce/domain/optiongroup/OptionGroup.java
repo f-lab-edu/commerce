@@ -2,7 +2,6 @@ package com.flab.commerce.domain.optiongroup;
 
 import com.flab.commerce.domain.option.Option;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,7 @@ public class OptionGroup {
 
   private Long storeId;
 
-  private List<Option> options = new ArrayList<>();
+  private List<Option> options;
 
   private ZonedDateTime createDateTime;
 

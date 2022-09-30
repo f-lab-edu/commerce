@@ -19,7 +19,7 @@ import com.flab.commerce.domain.user.UserMapper;
 import com.flab.commerce.exception.BadInputException;
 import com.flab.commerce.security.WithMockDetails;
 import com.flab.commerce.util.Constants;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -343,7 +343,7 @@ class MenuControllerTest {
     // Given
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -366,7 +366,7 @@ class MenuControllerTest {
     // Given
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -389,7 +389,7 @@ class MenuControllerTest {
     // Given
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -413,7 +413,7 @@ class MenuControllerTest {
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -437,7 +437,7 @@ class MenuControllerTest {
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -461,7 +461,7 @@ class MenuControllerTest {
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);
@@ -485,7 +485,7 @@ class MenuControllerTest {
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
-        .price(BigDecimal.valueOf(1000L))
+        .price(BigInteger.valueOf(1000L))
         .image(UUID.randomUUID() + ".jpg")
         .build();
     String body = objectMapper.writeValueAsString(menuRegisterDto);

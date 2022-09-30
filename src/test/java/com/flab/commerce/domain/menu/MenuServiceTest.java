@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flab.commerce.exception.BadInputException;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +35,7 @@ class MenuServiceTest {
     // Given
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(1L)
         .createDateTime(ZonedDateTime.now())
@@ -54,7 +54,7 @@ class MenuServiceTest {
     // Given
     Menu menu = Menu.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .storeId(-1L)
         .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
@@ -180,7 +180,7 @@ class MenuServiceTest {
     Menu patchMenu = Menu.builder()
         .id(-1L)
         .name("치즈 돈까스")
-        .price(BigDecimal.valueOf(10001L))
+        .price(BigInteger.valueOf(10001L))
         .image("image2")
         .modifyDateTime(ZonedDateTime.now())
         .build();

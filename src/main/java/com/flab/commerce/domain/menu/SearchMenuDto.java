@@ -1,6 +1,6 @@
 package com.flab.commerce.domain.menu;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +17,7 @@ public class SearchMenuDto {
 
   private String name;
 
-  private BigDecimal price;
+  private BigInteger price;
 
   private String image;
 

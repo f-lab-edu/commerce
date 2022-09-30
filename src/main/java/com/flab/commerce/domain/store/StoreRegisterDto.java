@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.imageio.ImageIO;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Builder
@@ -38,8 +38,8 @@ public class StoreRegisterDto {
                 .description(description)
                 .image(image)
                 .ownerId(ownerId)
-                .createDateTime(LocalDateTime.now())
-                .updateDateTime(LocalDateTime.now())
+                .createDateTime(ZonedDateTime.now())
+                .modifyDateTime(ZonedDateTime.now())
                 .build();
 
     }

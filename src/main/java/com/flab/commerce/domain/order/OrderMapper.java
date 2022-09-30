@@ -7,4 +7,5 @@ public interface OrderMapper {
 
   int save(Orders orders);
 
+  Orders findById(long id);
 }

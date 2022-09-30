@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Builder
@@ -29,7 +29,7 @@ public class Store {
 
     private Long ownerId;
 
-    private LocalDateTime createDateTime;
+    private ZonedDateTime createDateTime;
 
-    private LocalDateTime updateDateTime;
+    private ZonedDateTime modifyDateTime;
 }

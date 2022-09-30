@@ -3,7 +3,7 @@ package com.flab.commerce.domain.menu;
 import static com.flab.commerce.util.Constants.LENGTH_MUST_BE_BETWEEN_MIN_AND_NAX;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -44,7 +44,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -59,7 +59,7 @@ class MenuPatchDtoTest {
   void 검증_void_name만Null() {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -103,7 +103,7 @@ class MenuPatchDtoTest {
   void 검증_void_가격만NotNull() {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .build();
 
     // When
@@ -118,7 +118,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .build();
 
     // When
@@ -147,7 +147,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -168,7 +168,7 @@ class MenuPatchDtoTest {
     IntStream.range(0, 31).forEach(sb::append);
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name(sb.toString())
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -186,7 +186,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("")
-        .price(BigDecimal.valueOf(10000L))
+        .price(BigInteger.valueOf(10000L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -204,7 +204,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(-1L))
+        .price(BigInteger.valueOf(-1L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -222,7 +222,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(10_000_001L))
+        .price(BigInteger.valueOf(10_000_001L))
         .image(UUID.randomUUID() + ".png")
         .build();
 
@@ -242,7 +242,7 @@ class MenuPatchDtoTest {
     IntStream.range(0, 39).forEach(sb::append);
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(15_000L))
+        .price(BigInteger.valueOf(15_000L))
         .image(sb.toString())
         .build();
 
@@ -263,7 +263,7 @@ class MenuPatchDtoTest {
     IntStream.range(0, 42).forEach(sb::append);
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(15_000L))
+        .price(BigInteger.valueOf(15_000L))
         .image(sb.toString())
         .build();
 
@@ -282,7 +282,7 @@ class MenuPatchDtoTest {
     // Given
     MenuPatchDto menuPatchDto = MenuPatchDto.builder()
         .name("돈까스")
-        .price(BigDecimal.valueOf(15_000L))
+        .price(BigInteger.valueOf(15_000L))
         .image("")
         .build();
 

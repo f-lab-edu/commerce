@@ -6,9 +6,9 @@
   <insert id="register" useGeneratedKeys="true" keyProperty="id"
     parameterType="com.flab.commerce.domain.store.Store">
     INSERT INTO store(name, phone, address, status, description, image, owner_id, create_date_time,
-                      update_date_time)
+                      modify_date_time)
     VALUES (#{name}, #{phone}, #{address}, #{status}, #{description}, #{image}, #{ownerId},
-            #{createDateTime}, #{updateDateTime});
+            #{createDateTime}, #{modifyDateTime});
   </insert>
 
   <select id="idExists" resultType="java.lang.Boolean">

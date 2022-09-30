@@ -6,7 +6,6 @@ import com.flab.commerce.security.owner.OwnerDetails;
 import com.flab.commerce.security.user.GeneralUserDetails;
 import com.flab.commerce.util.Constants;
 import com.flab.commerce.util.Utils;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +23,7 @@ public class WithMockDetailsSecurityContextFactory implements
   public SecurityContext createSecurityContext(WithMockDetails withMockDetails) {
     SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-    UserDetails userDetails = getUserDetails(withMockDetails.rule());
+    UserDetails userDetails = getUserDetails(withMockDetails.role());
 
     Authentication auth =
         UsernamePasswordAuthenticationToken.authenticated(userDetails, userDetails.getPassword(),
@@ -65,8 +64,8 @@ public class WithMockDetailsSecurityContextFactory implements
         .password(Utils.encodePassword("password"))
         .name("이름")
         .phone("010-1234-5678")
-        .createDateTime(LocalDateTime.now())
-        .updateDateTime(LocalDateTime.now())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
         .build();
 
     return new OwnerDetails(owner,

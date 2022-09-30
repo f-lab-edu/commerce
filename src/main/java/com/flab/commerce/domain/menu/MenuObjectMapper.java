@@ -13,10 +13,15 @@ public interface MenuObjectMapper {
   List<SearchMenuDto> toDto(List<Menu> menus);
 
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "groups", ignore = true)
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   Menu toEntity(MenuRegisterDto menuRegisterDto, Long storeId);
 
+
+  @Mapping(target = "storeId", ignore = true)
+  @Mapping(target = "groups", ignore = true)
+  @Mapping(target = "createDateTime", ignore = true)
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   Menu toEntity(MenuPatchDto menuPatchDto, Long id);
 }
