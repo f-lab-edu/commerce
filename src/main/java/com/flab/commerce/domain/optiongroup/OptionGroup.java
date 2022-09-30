@@ -22,7 +22,7 @@ public class OptionGroup {
   private Long storeId;
 
   private List<Option> options = new ArrayList<>();
-
+  
   private ZonedDateTime createDateTime;
 
   private ZonedDateTime modifyDateTime;

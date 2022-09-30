@@ -36,6 +36,7 @@ class OptionGroupMapperTest {
   @Autowired
   OptionGroupMapper optionGroupMapper;
 
+
   @Autowired
   OptionMapper optionMapper;
 
@@ -80,7 +81,8 @@ class OptionGroupMapperTest {
 
   @Test
   void 옵션그룹저장_DataIntegrityViolationException_컬럼NotNull(){
-    // given
+    // Given
+
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
         .password("1234")

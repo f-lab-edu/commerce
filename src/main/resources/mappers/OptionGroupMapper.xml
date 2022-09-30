@@ -13,7 +13,7 @@
       <result property="price" column="o_price"/>
     </collection>
   </resultMap>
-
+  
   <insert id="save" useGeneratedKeys="true" keyProperty="id"
     parameterType="com.flab.commerce.domain.optiongroup.OptionGroup">
     INSERT INTO option_group (name, store_id, create_date_time, modify_date_time)
@@ -63,7 +63,6 @@
     FROM option_group
     WHERE id = #{id};
   </select>
-
   <select id="selectOptionGroupAndOptions" resultMap="optionGroupAndOptions"
     parameterType="java.lang.Long">
     SELECT og.id       AS og_id,

@@ -71,6 +71,7 @@ CREATE TABLE option_group
     modify_date_time timestamp   NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (store_id) REFERENCES store (id)
+
 );
 
 CREATE TABLE options
@@ -96,4 +97,4 @@ CREATE TABLE menu_option_group
     FOREIGN KEY (menu_id) REFERENCES menu (id),
     FOREIGN KEY (option_group_id) REFERENCES option_group (id),
     UNIQUE (menu_id, option_group_id)
-)
+);
