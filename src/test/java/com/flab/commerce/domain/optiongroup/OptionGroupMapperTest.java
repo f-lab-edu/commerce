@@ -2,12 +2,16 @@ package com.flab.commerce.domain.optiongroup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
+import com.flab.commerce.domain.option.Option;
+import com.flab.commerce.domain.option.OptionMapper;
 import com.flab.commerce.domain.owner.Owner;
 import com.flab.commerce.domain.owner.OwnerMapper;
 import com.flab.commerce.domain.store.Store;
 import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -32,9 +36,13 @@ class OptionGroupMapperTest {
   @Autowired
   OptionGroupMapper optionGroupMapper;
 
+
+  @Autowired
+  OptionMapper optionMapper;
+
   @Test
   void 옵션그룹저장_1(){
-    // Given
+    // given
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
         .password("1234")
@@ -74,6 +82,7 @@ class OptionGroupMapperTest {
   @Test
   void 옵션그룹저장_DataIntegrityViolationException_컬럼NotNull(){
     // Given
+
     Owner owner = Owner.builder()
         .email("bgpark82@gmail.com")
         .password("1234")
@@ -585,5 +594,124 @@ class OptionGroupMapperTest {
     assertThat(countUpdated).isZero();
     assertThat(updated.getName()).isNotEqualTo(update.getName());
     assertThat(updated.getName()).isEqualTo(optionGroup.getName());
+  }
+
+  @Test
+  void 옵션그룹과옵션들조회_optionGroup_옵션그룹과옵션들(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    Option option1 = Option.builder()
+        .name("옵션1")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option1);
+
+    Option option2 = Option.builder()
+        .name("옵션2")
+        .price(BigInteger.valueOf(1000))
+        .optionGroupId(optionGroup.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionMapper.save(option2);
+
+    // When
+    OptionGroup selected = optionGroupMapper.selectOptionGroupAndOptions(optionGroup.getId());
+    List<String> names = selected.getOptions().stream().map(Option::getName)
+        .collect(Collectors.toList());
+    List<BigInteger> prices = selected.getOptions().stream().map(Option::getPrice)
+        .collect(Collectors.toList());
+
+    // Then
+    assertThat(selected).isNotNull();
+    assertThat(selected.getName()).isEqualTo(optionGroup.getName());
+    assertThat(selected.getStoreId()).isEqualTo(optionGroup.getStoreId());
+    assertThat(selected.getOptions()).hasSize(2);
+    assertThat(names).contains(option1.getName(), option2.getName());
+    assertThat(prices).contains(option1.getPrice(), option2.getPrice());
+  }
+
+  @Test
+  void 옵션그룹과옵션들조회_optionGroup_옵션이없는경우(){
+    // Given
+    Owner owner = Owner.builder()
+        .email("bgpark82@gmail.com")
+        .password("1234")
+        .name("박병길")
+        .phone("0101231234")
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .build();
+    ownerMapper.register(owner);
+
+    Store store = Store.builder()
+        .name("홍콩반점")
+        .address("서울시 서초구 반포동")
+        .phone("021231234")
+        .description("중국집")
+        .status(StoreStatus.OPEN)
+        .createDateTime(LocalDateTime.now())
+        .updateDateTime(LocalDateTime.now())
+        .ownerId(owner.getId())
+        .build();
+    storeMapper.register(store);
+
+    OptionGroup optionGroup = OptionGroup.builder()
+        .name("옵션그룹1")
+        .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    optionGroupMapper.save(optionGroup);
+
+    // When
+    OptionGroup selected = optionGroupMapper.selectOptionGroupAndOptions(optionGroup.getId());
+
+    // Then
+    assertThat(selected).isNotNull();
+    assertThat(selected.getName()).isEqualTo(optionGroup.getName());
+    assertThat(selected.getStoreId()).isEqualTo(optionGroup.getStoreId());
+    assertThat(selected.getOptions()).isEmpty();
+  }
+
+  @Test
+  void 옵션그룹과옵션들조회_null_옵션그룹이존재하지않는경우(){
+    // When
+    OptionGroup selected = optionGroupMapper.selectOptionGroupAndOptions(any());
+
+    // Then
+    assertThat(selected).isNull();
   }
 }

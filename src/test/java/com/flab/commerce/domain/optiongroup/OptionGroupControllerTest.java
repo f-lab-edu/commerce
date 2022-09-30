@@ -70,7 +70,7 @@ class OptionGroupControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
         .andDo(print())
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     verify(storeService).validateOwnerStore(any(), any());
     verify(optionGroupService).registerOptionGroup(any());
@@ -477,5 +477,89 @@ class OptionGroupControllerTest {
     verify(storeService).validateOwnerStore(any(), any());
     verify(optionGroupService).validateOptionGroupStore(any(), any());
     verify(optionGroupService, never()).updateOptionGroup(any());
+  }
+
+  @Test
+  void 옵션들과옵션그룹을가져오기_200() throws Exception{
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  @WithMockUser
+  void 옵션들과옵션그룹을가져오기_403_사용자권한() throws Exception{
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 옵션들과옵션그룹을가져오기_403_익명사용자권한() throws Exception{
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  void 옵션들과옵션그룹을가져오기_400_가게가없는경우() throws Exception{
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  void 옵션들과옵션그룹을가져오기_401_다른사장님의가게() throws Exception {
+    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService, never()).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  void 옵션들과옵션그룹을가져오기_400_옵션그룹이없는경우() throws Exception{
+    doThrow(BadInputException.class).when(optionGroupService).validateOptionGroupStore(any(), any());
+
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
+  }
+
+  @Test
+  void 옵션들과옵션그룹을가져오기_401_다른가게의옵션() throws Exception {
+    doThrow(AccessDeniedException.class).when(optionGroupService).validateOptionGroupStore(any(), any());
+    mockMvc.perform(get("/stores/1/option-groups/1"))
+        .andDo(print())
+        .andExpect(status().isUnauthorized());
+
+    verify(storeService).validateOwnerStore(any(), any());
+    verify(optionGroupService).validateOptionGroupStore(any(), any());
+    verify(optionGroupService, never()).getOptionGroupAndOptions(any());
   }
 }
