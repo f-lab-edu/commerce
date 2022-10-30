@@ -1,7 +1,6 @@
 package com.flab.commerce.domain.store;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import com.flab.commerce.domain.owner.Owner;
 import com.flab.commerce.domain.owner.OwnerMapper;
@@ -9,10 +8,8 @@ import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = NONE)
 class StoreMapperTest {
 
     @Autowired
@@ -23,7 +20,17 @@ class StoreMapperTest {
 
     @Test
     void 식당을_등록한다() {
-        Store store = createStore(1L);
+        Owner owner = Owner.builder()
+            .email("bgpark82@gmail.com")
+            .password("1234")
+            .name("박병길")
+            .phone("0101231234")
+            .createDateTime(ZonedDateTime.now())
+            .modifyDateTime(ZonedDateTime.now())
+            .build();
+        ownerMapper.register(owner);
+
+        Store store = createStore(owner.getId());
 
         int countInsertRow = mapper.register(store);
 
@@ -33,7 +40,17 @@ class StoreMapperTest {
     @Test
     void 아이디가존재한다_true() {
         // Given
-        Store store = createStore(1L);
+        Owner owner = Owner.builder()
+            .email("bgpark82@gmail.com")
+            .password("1234")
+            .name("박병길")
+            .phone("0101231234")
+            .createDateTime(ZonedDateTime.now())
+            .modifyDateTime(ZonedDateTime.now())
+            .build();
+        ownerMapper.register(owner);
+
+        Store store = createStore(owner.getId());
         mapper.register(store);
 
         // When

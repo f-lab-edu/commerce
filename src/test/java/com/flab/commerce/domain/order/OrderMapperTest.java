@@ -2,7 +2,6 @@ package com.flab.commerce.domain.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 import com.flab.commerce.domain.user.User;
 import com.flab.commerce.domain.user.UserMapper;
@@ -11,12 +10,9 @@ import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.dao.DataIntegrityViolationException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 class OrderMapperTest {
 
   @Autowired
@@ -72,7 +68,7 @@ class OrderMapperTest {
             "[{\"name\":\"메뉴\",\"price\":1000,\"totalPrice\":10100,\"amount\":10,\"orderMenuOptionSaveDtos\":[{\"optionGroupName\":\"옵션그룹\",\"optionName\":\"옵션1\",\"price\":0},{\"optionGroupName\":\"옵션그룹\",\"optionName\":\"옵션2\",\"price\":10}]}]")
         .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
-        .userId(anyLong())
+        .userId(1L)
         .build();
 
     // When

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.commerce.domain.owner.OwnerMapper;
 import com.flab.commerce.domain.store.StoreRegisterDto.StoreRegisterDtoBuilder;
 import com.flab.commerce.domain.user.UserMapper;
+import com.flab.commerce.security.WithMockDetails;
+import com.flab.commerce.util.Constants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,12 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(StoreController.class)
 @ComponentScan(basePackages = "com.flab.commerce.security")
-@WithMockUser
+@WithMockDetails(role = Constants.ROLE_OWNER)
 class StoreControllerTest {
 
   @Autowired

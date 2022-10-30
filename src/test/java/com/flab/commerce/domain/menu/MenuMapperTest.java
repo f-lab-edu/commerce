@@ -2,7 +2,6 @@ package com.flab.commerce.domain.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import com.flab.commerce.domain.owner.Owner;
 import com.flab.commerce.domain.owner.OwnerMapper;
@@ -11,23 +10,17 @@ import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
-import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = NONE)
 class MenuMapperTest {
 
   @Autowired
@@ -402,6 +395,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -461,6 +455,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -518,6 +513,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -574,6 +570,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -630,6 +627,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -687,6 +685,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -744,6 +743,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -801,6 +801,7 @@ class MenuMapperTest {
         .price(BigInteger.valueOf(10000L))
         .image("image")
         .storeId(store.getId())
+        .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
     menuMapper.register(menu);
@@ -896,18 +897,5 @@ class MenuMapperTest {
     // Then
     assertThat(menus).hasSize(2);
     assertThat(ids).contains(menu.getId(), menu2.getId());
-  }
-
-  @Test
-  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
-    // Given
-    Set<Long> emptyIds = Collections.emptySet();
-
-    // When
-    Throwable throwable = Assertions.catchThrowable(
-        () -> menuMapper.findByIdIn(emptyIds));
-
-    // Then
-    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }

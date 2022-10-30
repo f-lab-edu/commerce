@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.menu;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -77,7 +78,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isCreated());
 
-    verify(storeService).validateOwnerStore(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
     verify(menuService).registerMenu(any());
   }
 
@@ -93,7 +94,7 @@ class MenuControllerTest {
 
     // When
     doThrow(AccessDeniedException.class).when(storeService)
-        .validateOwnerStore(any(), any());
+        .validateOwnerStore(anyLong(), anyLong());
 
     // Then
     mockMvc.perform(post("/stores/51/menus")
@@ -102,7 +103,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isUnauthorized());
 
-    verify(storeService).validateOwnerStore(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
     verify(menuService, never()).registerMenu(any());
   }
 
@@ -118,7 +119,7 @@ class MenuControllerTest {
 
     // When
     doThrow(BadInputException.class).when(storeService)
-        .validateOwnerStore(any(), any());
+        .validateOwnerStore(anyLong(), anyLong());
     // Then
     mockMvc.perform(post("/stores/51/menus")
             .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +127,7 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateOwnerStore(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
     verify(menuService, never()).registerMenu(any());
   }
 
@@ -146,7 +147,7 @@ class MenuControllerTest {
             .content(body))
         .andDo(print())
         .andExpect(status().isBadRequest());
-    verify(storeService, never()).validateOwnerStore(any(), any());
+    verify(storeService, never()).validateOwnerStore(anyLong(), anyLong());
     verify(menuService, never()).registerMenu(any());
   }
 
@@ -157,7 +158,7 @@ class MenuControllerTest {
     List<Menu> menus = Arrays.asList(new Menu(), new Menu(), new Menu(), new Menu());
 
     // When
-    when(menuService.getMenus(any())).thenReturn(menus);
+    when(menuService.getMenus(anyLong())).thenReturn(menus);
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -165,8 +166,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStoreExistence(any());
-    verify(menuService).getMenus(any());
+    verify(storeService).validateStoreExistence(anyLong());
+    verify(menuService).getMenus(anyLong());
   }
 
   @Test
@@ -176,7 +177,7 @@ class MenuControllerTest {
     List<Menu> menus = Arrays.asList(new Menu(), new Menu(), new Menu(), new Menu());
 
     // When
-    when(menuService.getMenus(any())).thenReturn(menus);
+    when(menuService.getMenus(anyLong())).thenReturn(menus);
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -184,8 +185,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStoreExistence(any());
-    verify(menuService).getMenus(any());
+    verify(storeService).validateStoreExistence(anyLong());
+    verify(menuService).getMenus(anyLong());
   }
 
   @Test
@@ -195,7 +196,7 @@ class MenuControllerTest {
     List<Menu> menus = Arrays.asList(new Menu(), new Menu(), new Menu(), new Menu());
 
     // When
-    when(menuService.getMenus(any())).thenReturn(menus);
+    when(menuService.getMenus(anyLong())).thenReturn(menus);
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -203,14 +204,14 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStoreExistence(any());
-    verify(menuService).getMenus(any());
+    verify(storeService).validateStoreExistence(anyLong());
+    verify(menuService).getMenus(anyLong());
   }
 
   @Test
   void 메뉴목록조회_200_가게에메뉴가없는경우() throws Exception {
     // When
-    when(menuService.getMenus(any())).thenReturn(Collections.emptyList());
+    when(menuService.getMenus(anyLong())).thenReturn(Collections.emptyList());
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -218,14 +219,14 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateStoreExistence(any());
-    verify(menuService).getMenus(any());
+    verify(storeService).validateStoreExistence(anyLong());
+    verify(menuService).getMenus(anyLong());
   }
 
   @Test
   void 메뉴목록조회_400_가게가없는경우() throws Exception {
     // When
-    doThrow(BadInputException.class).when(storeService).validateStoreExistence(any());
+    doThrow(BadInputException.class).when(storeService).validateStoreExistence(anyLong());
 
     // Then
     mockMvc.perform(get("/stores/51/menus")
@@ -233,8 +234,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateStoreExistence(any());
-    verify(menuService, never()).getMenus(any());
+    verify(storeService).validateStoreExistence(anyLong());
+    verify(menuService, never()).getMenus(anyLong());
   }
 
   @Test
@@ -245,9 +246,9 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
-    verify(menuService).deleteMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
+    verify(menuService).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
@@ -258,9 +259,9 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isForbidden());
 
-    verify(storeService, never()).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService, never()).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
@@ -271,15 +272,15 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isForbidden());
 
-    verify(storeService, never()).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService, never()).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
   void 메뉴삭제_400_가게id가존재하지않을경우() throws Exception {
     // When
-    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(anyLong(), anyLong());
 
     // Then
     mockMvc.perform(delete("/stores/51/menus/1")
@@ -287,15 +288,16 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
   void 메뉴삭제_401_다른사장님의가게() throws Exception {
     // When
-    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+    doThrow(AccessDeniedException.class).when(storeService)
+        .validateOwnerStore(anyLong(), anyLong());
 
     // Then
     mockMvc.perform(delete("/stores/51/menus/1")
@@ -303,39 +305,39 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isUnauthorized());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
   void 메뉴삭제_400_메뉴id가존재하지않는경우() throws Exception {
     // When
-    doThrow(BadInputException.class).when(menuService).validateMenu(any(), any());
+    doThrow(BadInputException.class).when(menuService).validateMenu(anyLong(), anyLong());
     // Then
     mockMvc.perform(delete("/stores/51/menus/1")
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
   void 메뉴삭제_401_가게의메뉴가아닌경우() throws Exception {
     // When
-    doThrow(AccessDeniedException.class).when(menuService).validateMenu(any(), any());
+    doThrow(AccessDeniedException.class).when(menuService).validateMenu(anyLong(), anyLong());
     // Then
     mockMvc.perform(delete("/stores/51/menus/1")
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isUnauthorized());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
-    verify(menuService, never()).deleteMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
+    verify(menuService, never()).deleteMenu(anyLong(), anyLong());
   }
 
   @Test
@@ -355,8 +357,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isOk());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
     verify(menuService).patchMenu(any());
   }
 
@@ -378,8 +380,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isForbidden());
 
-    verify(storeService, never()).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
+    verify(storeService, never()).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 
@@ -401,15 +403,15 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isForbidden());
 
-    verify(storeService, never()).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
+    verify(storeService, never()).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 
   @Test
   void 메뉴패치_400_가게id가존재하지않을경우() throws Exception {
     // Given
-    doThrow(BadInputException.class).when(storeService).validateOwnerStore(any(), any());
+    doThrow(BadInputException.class).when(storeService).validateOwnerStore(anyLong(), anyLong());
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
@@ -425,15 +427,16 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 
   @Test
   void 메뉴패치_401_다른사장님의가게() throws Exception {
     // Given
-    doThrow(AccessDeniedException.class).when(storeService).validateOwnerStore(any(), any());
+    doThrow(AccessDeniedException.class).when(storeService)
+        .validateOwnerStore(anyLong(), anyLong());
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
@@ -449,15 +452,15 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isUnauthorized());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService, never()).validateMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService, never()).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 
   @Test
   void 메뉴패치_400_메뉴id가존재하지않는경우() throws Exception {
     // Given
-    doThrow(BadInputException.class).when(menuService).validateMenu(any(), any());
+    doThrow(BadInputException.class).when(menuService).validateMenu(anyLong(), anyLong());
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
@@ -473,15 +476,15 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 
   @Test
   void 메뉴패치_401_가게의메뉴가아닌경우() throws Exception {
     // Given
-    doThrow(AccessDeniedException.class).when(menuService).validateMenu(any(), any());
+    doThrow(AccessDeniedException.class).when(menuService).validateMenu(anyLong(), anyLong());
 
     MenuPatchDto menuRegisterDto = MenuPatchDto.builder()
         .name("메뉴2")
@@ -497,8 +500,8 @@ class MenuControllerTest {
         .andDo(print())
         .andExpect(status().isUnauthorized());
 
-    verify(storeService).validateOwnerStore(any(), any());
-    verify(menuService).validateMenu(any(), any());
+    verify(storeService).validateOwnerStore(anyLong(), anyLong());
+    verify(menuService).validateMenu(anyLong(), anyLong());
     verify(menuService, never()).patchMenu(any());
   }
 }

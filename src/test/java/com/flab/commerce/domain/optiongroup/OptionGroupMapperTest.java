@@ -2,7 +2,6 @@ package com.flab.commerce.domain.optiongroup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 
 import com.flab.commerce.domain.option.Option;
 import com.flab.commerce.domain.option.OptionMapper;
@@ -12,7 +11,6 @@ import com.flab.commerce.domain.store.Store;
 import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
 import java.math.BigInteger;
-import java.time.ZonedDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,12 +22,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class OptionGroupMapperTest {
 
   @Autowired
@@ -712,7 +708,7 @@ class OptionGroupMapperTest {
   @Test
   void 옵션그룹과옵션들조회_null_옵션그룹이존재하지않는경우(){
     // When
-    OptionGroup selected = optionGroupMapper.selectOptionGroupAndOptions(any());
+    OptionGroup selected = optionGroupMapper.selectOptionGroupAndOptions(1L);
 
     // Then
     assertThat(selected).isNull();
@@ -767,18 +763,5 @@ class OptionGroupMapperTest {
     // Then
     assertThat(optionGroups).hasSize(2);
     assertThat(ids).contains(optionGroup.getId(), optionGroup2.getId());
-  }
-
-  @Test
-  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
-    // Given
-    Set<Long> emptyIds = Collections.emptySet();
-
-    // When
-    Throwable throwable = Assertions.catchThrowable(
-        () -> optionGroupMapper.findByIdIn(emptyIds));
-
-    // Then
-    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }

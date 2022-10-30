@@ -2,7 +2,6 @@ package com.flab.commerce.domain.option;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import com.flab.commerce.domain.optiongroup.OptionGroup;
 import com.flab.commerce.domain.optiongroup.OptionGroupMapper;
@@ -12,7 +11,6 @@ import com.flab.commerce.domain.store.Store;
 import com.flab.commerce.domain.store.StoreMapper;
 import com.flab.commerce.domain.store.StoreStatus;
 import java.math.BigInteger;
-import java.time.ZonedDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,12 +22,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = NONE)
 class OptionMapperTest {
 
   @Autowired
@@ -630,18 +626,5 @@ class OptionMapperTest {
     // Then
     assertThat(options).hasSize(2);
     assertThat(ids).contains(option.getId(), option2.getId());
-  }
-
-  @Test
-  void 아이디로찾기In_badSqlGrammarException_emptyIds() {
-    // Given
-    Set<Long> emptyIds = Collections.emptySet();
-
-    // When
-    Throwable throwable = Assertions.catchThrowable(
-        () -> optionMapper.findByIdIn(emptyIds));
-
-    // Then
-    assertThat(throwable).isInstanceOf(BadSqlGrammarException.class);
   }
 }

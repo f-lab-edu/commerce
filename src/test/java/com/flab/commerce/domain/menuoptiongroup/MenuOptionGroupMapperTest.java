@@ -30,7 +30,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = NONE)
 class MenuOptionGroupMapperTest {
 
   @Autowired

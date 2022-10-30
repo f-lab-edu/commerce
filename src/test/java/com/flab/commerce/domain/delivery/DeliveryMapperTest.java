@@ -2,7 +2,6 @@ package com.flab.commerce.domain.delivery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
-import static org.mockito.ArgumentMatchers.anyLong;
 
 import com.flab.commerce.domain.order.OrderMapper;
 import com.flab.commerce.domain.order.OrderStatus;
@@ -14,12 +13,9 @@ import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.dao.DataIntegrityViolationException;
 
 @MybatisTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 class DeliveryMapperTest {
 
   @Autowired
@@ -92,7 +88,7 @@ class DeliveryMapperTest {
         .zipcode("12345")
         .phone("01045808682")
         .status(DeliveryStatus.READY)
-        .orderId(anyLong())
+        .orderId(1L)
         .createDateTime(ZonedDateTime.now())
         .modifyDateTime(ZonedDateTime.now())
         .build();
