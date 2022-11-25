@@ -1,0 +1,26 @@
+version: '3'
+services:
+  commerce-app-1:
+      container_name: commerce-app1
+      image: "jinhoa52/commerce-app"
+      ports:
+       - "8801:8081"
+  commerce-app-2:
+    container_name: commerce-app2
+    image: "jinhoa52/commerce-app"
+    ports:
+      - "8802:8081"
+  commerce-app-3:
+    container_name: commerce-app3
+    image: "jinhoa52/commerce-app"
+    ports:
+      - "8803:8081"
+  nginx:
+    container_name: commerce-nginx
+    image: "jinhoa52/commerce-nginx"
+    ports:
+     - "8082:80"
+    depends_on:
+     - commerce-app-1
+     - commerce-app-2
+     - commerce-app-3
