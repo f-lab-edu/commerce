@@ -7,7 +7,7 @@ pipeline {
         checkout([
           $class           : 'GitSCM',
           branches         : [[name: '*/dev']],
-          extensions       : [],
+          extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'commerce']],
           userRemoteConfigs: [[
                                 credentialsId: 'github',
                                 url          : 'https://github.com/f-lab-edu/commerce'
@@ -24,27 +24,29 @@ pipeline {
       }
     }
 
-    stage('build gradle'){
+    stage('build'){
       steps{
-        sh 'echo build start'
-        sh './gradlew clean bootJar'
+        dir("${env.WORKSPACE}/commerce") {
+          sh './gradlew bootJar'
+        }
       }
     }
 
     stage('test gradle'){
-        steps{
-          sh 'echo test start'
+      steps{
+        dir("${env.WORKSPACE}/commerce") {
           sh './gradlew test'
         }
+      }
     }
 
     stage('build docker') {
       steps {
         withDockerRegistry(credentialsId: 'docker', url: '') {
           script{
-            def appImage = docker.build("jinhoa52/commerce-app")
+            def appImage = docker.build("jinhoa52/commerce-app", ". -f ./commerce/Dockerfile --no-cache")
             appImage.push()
-            def serverImage = docker.build("jinhoa52/nginx")
+            def serverImage = docker.build("jinhoa52/commerce-nginx",". -f ./commerce/nginx/Dockerfile --no-cache")
             serverImage.push()
           }
         }
