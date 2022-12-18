@@ -6,6 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,5 +138,69 @@ class CartControllerTest {
         .andExpect(status().isBadRequest());
 
     verify(cartService, never()).addMenu(any());
+  }
+
+  @Test
+  void 메뉴수정_200() throws Exception {
+    // Given
+    long id = 1L;
+    long amount = 2L;
+    CartUpdateDto cartUpdateDto = CartUpdateDto.builder()
+        .id(id)
+        .amount(amount)
+        .build();
+    String body = objectMapper.writeValueAsString(cartUpdateDto);
+
+    // Then
+    mockMvc.perform(put("/carts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    verify(cartService).updateAmount(any());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void 메뉴수정_403_익명사용자() throws Exception {
+    // Given
+    long id = 1L;
+    long amount = 2L;
+    CartUpdateDto cartUpdateDto = CartUpdateDto.builder()
+        .id(id)
+        .amount(amount)
+        .build();
+    String body = objectMapper.writeValueAsString(cartUpdateDto);
+
+    // Then
+    mockMvc.perform(put("/carts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isForbidden());
+
+    verify(cartService, never()).updateAmount(any());
+  }
+
+  @Test
+  void 메뉴수정_400_수량이0이하() throws Exception {
+    // Given
+    long id = 1L;
+    long amount = 0L;
+    CartUpdateDto cartUpdateDto = CartUpdateDto.builder()
+        .id(id)
+        .amount(amount)
+        .build();
+    String body = objectMapper.writeValueAsString(cartUpdateDto);
+
+    // Then
+    mockMvc.perform(put("/carts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+
+    verify(cartService, never()).updateAmount(any());
   }
 }

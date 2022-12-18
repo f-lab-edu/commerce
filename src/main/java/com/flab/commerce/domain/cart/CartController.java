@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,5 +38,17 @@ public class CartController {
     cartService.addMenu(cart);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PutMapping
+  public ResponseEntity<Void> updateAmount(
+      @AuthenticationPrincipal GeneralUserDetails generalUserDetails,
+      @Valid @RequestBody CartUpdateDto cartUpdateDto) {
+
+    Long userId = generalUserDetails.getUser().getId();
+    Cart cart = CartObjectMapper.INSTANCE.dtoToCart(cartUpdateDto, userId);
+    cartService.updateAmount(cart);
+
+    return ResponseEntity.ok().build();
   }
 }

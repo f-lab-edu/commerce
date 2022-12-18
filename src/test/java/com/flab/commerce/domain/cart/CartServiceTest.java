@@ -1,6 +1,7 @@
 package com.flab.commerce.domain.cart;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -68,5 +69,53 @@ class CartServiceTest {
     verify(cartMapper, never()).findByUserIdAndMenuId(any(), any());
     verify(cartMapper, never()).updateAmount(any());
     verify(cartMapper).register(cart);
+  }
+
+  @Test
+  void 상품수정() {
+    // Given
+    Long id = 1L;
+    Long amount = 2L;
+    Long userId = 3L;
+    Cart cart = Cart.builder()
+        .id(id)
+        .amount(amount)
+        .userId(userId)
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    Cart foundCart = Cart.builder().id(id).userId(userId).build();
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(foundCart);
+    cartService.updateAmount(cart);
+
+    // Then
+    verify(cartMapper).findById(id);
+    verify(cartMapper).updateAmount(any());
+  }
+
+  @Test
+  void 상품수정_다른사용자의장바구니상품일경우() {
+    // Given
+    Long id = 1L;
+    Long amount = 2L;
+    Long userId = 3L;
+    Long otherUserId = 4L;
+    Cart cart = Cart.builder()
+        .id(id)
+        .amount(amount)
+        .userId(userId)
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    Cart foundCart = Cart.builder().id(id).userId(otherUserId).build();
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(foundCart);
+    Exception exception = catchException(() -> cartService.updateAmount(cart));
+
+    // Then
+    assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+    verify(cartMapper).findById(id);
+    verify(cartMapper, never()).updateAmount(any());
   }
 }

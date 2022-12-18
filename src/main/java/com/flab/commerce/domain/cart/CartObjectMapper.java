@@ -12,4 +12,9 @@ public interface CartObjectMapper {
   @Mapping(target = "createDateTime", expression = "java(java.time.ZonedDateTime.now())")
   @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
   Cart dtoToCart(CartRegisterDto cartRegisterDto, Long userId);
+
+  @Mapping(target = "menuId", ignore = true)
+  @Mapping(target = "createDateTime", ignore = true)
+  @Mapping(target = "modifyDateTime", expression = "java(java.time.ZonedDateTime.now())")
+  Cart dtoToCart(CartUpdateDto cartUpdateDto, Long userId);
 }
