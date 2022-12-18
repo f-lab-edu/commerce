@@ -62,6 +62,7 @@ class MenuControllerTest {
   @MockBean
   MenuMapper menuMapper;
 
+  @Test
   void 메뉴등록_201() throws Exception {
     // Given
     MenuRegisterDto menuRegisterDto = MenuRegisterDto.builder()

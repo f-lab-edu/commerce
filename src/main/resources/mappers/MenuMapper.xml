@@ -27,7 +27,11 @@
       AND store_id = #{storeId};
   </delete>
 
-  <select id="idAndStoreIdExists" resultType="com.flab.commerce.domain.menu.Menu">
+  <select id="idExists" resultType="boolean">
+    SELECT EXISTS(SELECT 1 FROM menu WHERE id = #{id});
+  </select>
+
+  <select id="idAndStoreIdExists" resultType="boolean">
     SELECT EXISTS(SELECT 1 FROM menu WHERE id = #{id} AND store_id = #{storeId});
   </select>
 
@@ -46,4 +50,5 @@
     FROM menu
     WHERE id IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>);
   </select>
+
 </mapper>
