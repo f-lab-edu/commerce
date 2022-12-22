@@ -85,6 +85,94 @@ class CartMapperTest {
   }
 
   @Test
+  void 수량수정() {
+    // Given
+    User user = getUser();
+    Menu menu = getMenu();
+    long beforeAmount = 1L;
+    long afterAmount = 3L;
+    Cart cart = Cart.builder()
+        .amount(beforeAmount)
+        .userId(user.getId())
+        .menuId(menu.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    cartMapper.register(cart);
+
+    // When
+    Cart updateCart = Cart.builder()
+        .id(cart.getId())
+        .amount(afterAmount)
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    cartMapper.updateAmount(updateCart);
+
+    // Then
+    Cart foundCart = cartMapper.findById(cart.getId());
+    assertThat(foundCart).isNotNull();
+    assertThat(foundCart.getAmount()).isNotEqualTo(beforeAmount);
+    assertThat(foundCart.getAmount()).isEqualTo(afterAmount);
+    assertThat(foundCart.getUserId()).isEqualTo(cart.getUserId());
+    assertThat(foundCart.getMenuId()).isEqualTo(cart.getMenuId());
+    assertThat(foundCart.getCreateDateTime()).isEqualTo(cart.getCreateDateTime());
+    assertThat(foundCart.getModifyDateTime()).isNotEqualTo(cart.getModifyDateTime());
+  }
+
+  @Test
+  void 장바구니메뉴삭제(){
+    User user = getUser();
+    Menu menu = getMenu();
+    long amount = 1L;
+    Cart cart = Cart.builder()
+        .amount(amount)
+        .userId(user.getId())
+        .menuId(menu.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    cartMapper.register(cart);
+
+    // when
+    cartMapper.deleteById(cart.getId());
+
+    // then
+    Cart foundCart = cartMapper.findById(cart.getId());
+    assertThat(foundCart).isNull();
+  }
+
+  @Test
+  void 사용자의장바구니메뉴모두삭제(){
+    User user = getUser();
+    Menu menu = getMenu();
+    long amount = 1L;
+    Cart cart = Cart.builder()
+        .amount(amount)
+        .userId(user.getId())
+        .menuId(menu.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    cartMapper.register(cart);
+    Menu menu2 = getMenu();
+    Cart cart2 = Cart.builder()
+        .amount(amount)
+        .userId(user.getId())
+        .menuId(menu2.getId())
+        .createDateTime(ZonedDateTime.now())
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+    cartMapper.register(cart2);
+
+    // when
+    cartMapper.deleteByUserId(user.getId());
+
+    // then
+    assertThat(cartMapper.findById(cart.getId())).isNull();
+    assertThat(cartMapper.findById(cart2.getId())).isNull();
+  }
+
+  @Test
   void 사용자아이디와메뉴아이디가존재한다() {
     // Given
     User user = getUser();
@@ -158,42 +246,7 @@ class CartMapperTest {
   }
 
   @Test
-  void 수량수정() {
-    // Given
-    User user = getUser();
-    Menu menu = getMenu();
-    long beforeAmount = 1L;
-    long afterAmount = 3L;
-    Cart cart = Cart.builder()
-        .amount(beforeAmount)
-        .userId(user.getId())
-        .menuId(menu.getId())
-        .createDateTime(ZonedDateTime.now())
-        .modifyDateTime(ZonedDateTime.now())
-        .build();
-    cartMapper.register(cart);
-
-    // When
-    Cart updateCart = Cart.builder()
-        .id(cart.getId())
-        .amount(afterAmount)
-        .modifyDateTime(ZonedDateTime.now())
-        .build();
-    cartMapper.updateAmount(updateCart);
-
-    // Then
-    Cart foundCart = cartMapper.findById(cart.getId());
-    assertThat(foundCart).isNotNull();
-    assertThat(foundCart.getAmount()).isNotEqualTo(beforeAmount);
-    assertThat(foundCart.getAmount()).isEqualTo(afterAmount);
-    assertThat(foundCart.getUserId()).isEqualTo(cart.getUserId());
-    assertThat(foundCart.getMenuId()).isEqualTo(cart.getMenuId());
-    assertThat(foundCart.getCreateDateTime()).isEqualTo(cart.getCreateDateTime());
-    assertThat(foundCart.getModifyDateTime()).isNotEqualTo(cart.getModifyDateTime());
-  }
-
-  @Test
-  void 아이디로찾기(){
+  void 아이디로찾기() {
     // Given
     User user = getUser();
     Menu menu = getMenu();
@@ -219,7 +272,7 @@ class CartMapperTest {
   }
 
   @Test
-  void 아이디로찾기_찾지못한경우(){
+  void 아이디로찾기_찾지못한경우() {
     // Given
     long id = 1L;
 

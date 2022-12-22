@@ -7,9 +7,13 @@ public interface CartMapper {
 
   void register(Cart cart);
 
-  boolean userIdAndMenuIdExists(Long userId, Long menuId);
-
   void updateAmount(Cart cart);
+
+  void deleteById(Long id);
+
+  void deleteByUserId(Long userId);
+
+  boolean userIdAndMenuIdExists(Long userId, Long menuId);
 
   Cart findByUserIdAndMenuId(Long userId, Long menuId);
 

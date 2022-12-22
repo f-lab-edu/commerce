@@ -8,6 +8,25 @@
     VALUES (#{amount}, #{userId}, #{menuId}, #{createDateTime}, #{modifyDateTime});
   </insert>
 
+  <update id="updateAmount" parameterType="com.flab.commerce.domain.cart.Cart">
+    UPDATE cart
+    SET amount           = #{amount},
+        modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
+
+  <delete id="deleteById">
+    DELETE
+    FROM cart
+    WHERE id = #{id};
+  </delete>
+
+  <delete id="deleteByUserId">
+    DELETE
+    FROM cart
+    WHERE user_id = #{userId};
+  </delete>
+
   <select id="userIdAndMenuIdExists" resultType="boolean">
     SELECT EXISTS(SELECT 1 FROM cart WHERE user_id = #{userId} AND menu_id = #{menuId});
   </select>
@@ -19,12 +38,6 @@
       AND menu_id = #{menuId};
   </select>
 
-  <update id="updateAmount" parameterType="com.flab.commerce.domain.cart.Cart">
-    UPDATE cart
-    SET amount           = #{amount},
-        modify_date_time = #{modifyDateTime}
-    WHERE id = #{id};
-  </update>
 
   <select id="findById" resultType="com.flab.commerce.domain.cart.Cart">
     SELECT *

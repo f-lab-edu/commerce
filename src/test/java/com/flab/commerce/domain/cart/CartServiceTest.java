@@ -3,6 +3,7 @@ package com.flab.commerce.domain.cart;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
 @ExtendWith(MockitoExtension.class)
 class CartServiceTest {
@@ -95,6 +97,28 @@ class CartServiceTest {
   }
 
   @Test
+  void 상품수정_상품이없는경우() {
+    // Given
+    Long id = 1L;
+    Long amount = 2L;
+    Long userId = 3L;
+    Cart cart = Cart.builder()
+        .id(id)
+        .amount(amount)
+        .userId(userId)
+        .modifyDateTime(ZonedDateTime.now())
+        .build();
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(null);
+    cartService.updateAmount(cart);
+
+    // Then
+    verify(cartMapper).findById(id);
+    verify(cartMapper, never()).updateAmount(any());
+  }
+
+  @Test
   void 상품수정_다른사용자의장바구니상품일경우() {
     // Given
     Long id = 1L;
@@ -114,8 +138,66 @@ class CartServiceTest {
     Exception exception = catchException(() -> cartService.updateAmount(cart));
 
     // Then
-    assertThat(exception).isInstanceOf(IllegalArgumentException.class);
+    assertThat(exception).isInstanceOf(AccessDeniedException.class);
     verify(cartMapper).findById(id);
     verify(cartMapper, never()).updateAmount(any());
+  }
+
+  @Test
+  void 삭제() {
+    // Given
+    Long id = 1L;
+    Long userId = 2L;
+    Cart cart = Cart.builder().id(id).userId(userId).build();
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(cart);
+    cartService.deleteById(id, userId);
+
+    // Then
+    verify(cartMapper).findById(id);
+    verify(cartMapper).deleteById(id);
+  }
+
+  @Test
+  void 삭제_상품이없는경우() {
+    // Given
+    Long id = 1L;
+    Long userId = 2L;
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(null);
+    cartService.deleteById(id, userId);
+
+    // Then
+    verify(cartMapper).findById(id);
+    verify(cartMapper, never()).deleteById(id);
+  }
+
+  @Test
+  void 삭제_다른사용자의장바구니() {
+    // Given
+    Long id = 1L;
+    Long userId = 2L;
+    Long otherUserId = 3L;
+    Cart cart = Cart.builder().id(id).userId(otherUserId).build();
+
+    // When
+    when(cartMapper.findById(id)).thenReturn(cart);
+    Exception exception = catchException(() -> cartService.deleteById(id, userId));
+
+    // Then
+    assertThat(exception).isInstanceOf(AccessDeniedException.class);
+    verify(cartMapper).findById(id);
+    verify(cartMapper, never()).deleteById(id);
+  }
+
+  @Test
+  void 사용자ID로삭제() {
+    // When
+    cartService.deleteByUserId(1L);
+
+    // Then
+    verify(cartMapper).deleteByUserId(anyLong());
   }
 }
