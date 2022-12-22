@@ -14,6 +14,7 @@ Content-Type: application/json
 ### 사용자가 로그인한다.
 POST http://localhost:8080/users/login
 Content-Type: application/json
+Set-Cookie: SESSION=N2JhM2ZjNmMtYjYwOS00Zjk2LWE5ZGMtZDg4MDM2NTM5ODg0; Path=/; HttpOnly; SameSite=Lax
 
 {
   "email": "test12@gmail.com",

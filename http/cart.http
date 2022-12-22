@@ -1,0 +1,19 @@
+### 장바구니 상품 추가한다.
+POST http://localhost:8080/carts
+Content-Type: application/json
+Set-Cookie: SESSION=N2JhM2ZjNmMtYjYwOS00Zjk2LWE5ZGMtZDg4MDM2NTM5ODg0; Path=/; HttpOnly; SameSite=Lax
+
+{
+  "menuId": 1,
+  "amount": 1
+}
+
+### 장바구니 상품 수정한다.
+PUT http://localhost:8080/carts
+Content-Type: application/json
+Set-Cookie: SESSION=N2JhM2ZjNmMtYjYwOS00Zjk2LWE5ZGMtZDg4MDM2NTM5ODg0; Path=/; HttpOnly; SameSite=Lax
+
+{
+  "menuId": 1,
+  "amount": 1
+}

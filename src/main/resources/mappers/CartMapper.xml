@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flab.commerce.domain.cart.CartMapper">
+  <insert id="register" parameterType="com.flab.commerce.domain.cart.Cart"
+    useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO cart (amount, user_id, menu_id, create_date_time, modify_date_time)
+    VALUES (#{amount}, #{userId}, #{menuId}, #{createDateTime}, #{modifyDateTime});
+  </insert>
+
+  <update id="updateAmount" parameterType="com.flab.commerce.domain.cart.Cart">
+    UPDATE cart
+    SET amount           = #{amount},
+        modify_date_time = #{modifyDateTime}
+    WHERE id = #{id};
+  </update>
+
+  <delete id="deleteById">
+    DELETE
+    FROM cart
+    WHERE id = #{id};
+  </delete>
+
+  <delete id="deleteByUserId">
+    DELETE
+    FROM cart
+    WHERE user_id = #{userId};
+  </delete>
+
+  <select id="userIdAndMenuIdExists" resultType="boolean">
+    SELECT EXISTS(SELECT 1 FROM cart WHERE user_id = #{userId} AND menu_id = #{menuId});
+  </select>
+
+  <select id="findByUserIdAndMenuId" resultType="com.flab.commerce.domain.cart.Cart">
+    SELECT *
+    FROM cart
+    WHERE user_id = #{userId}
+      AND menu_id = #{menuId};
+  </select>
+
+
+  <select id="findById" resultType="com.flab.commerce.domain.cart.Cart">
+    SELECT *
+    FROM cart
+    WHERE id = #{id};
+  </select>
+</mapper>

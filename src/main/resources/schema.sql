@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS menu_option_group;
 DROP TABLE IF EXISTS options;
 DROP TABLE IF EXISTS option_group;
+DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS menu;
 DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS delivery;
@@ -137,4 +138,18 @@ CREATE TABLE delivery
     PRIMARY KEY (id),
     FOREIGN KEY (order_id) REFERENCES orders (id),
     FOREIGN KEY (rider_id) REFERENCES rider (id)
+);
+
+CREATE TABLE cart
+(
+    id               INT       NOT NULL AUTO_INCREMENT,
+    amount           INT       NOT NULL,
+    user_id          INT       NOT NULL,
+    menu_id          INT       NOT NULL,
+    create_date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modify_date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (menu_id) REFERENCES menu (id),
+    UNIQUE (user_id, menu_id)
 );
